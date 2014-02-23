@@ -1,7 +1,7 @@
 import itertools
 from collections import Counter
 
-import utils
+from utils import weighted_choice
 
 
 def partitions(n):
@@ -69,10 +69,14 @@ def get_interval_content(chord):
     (m2, M2, m3, M3, P4, TT)
 
     >>> get_interval_content((4, 3, 5))
-    (0, 0, 2, 2, 2, 0)
+    (0, 0, 1, 1, 1, 0)
 
     >>> get_interval_content((4, 3, 3, 2))
-    (0, 2, 4, 2, 2, 2)
+    (0, 1, 2, 1, 1, 1)
+
+    >>> get_interval_content((6, 6))
+    (0, 0, 0, 0, 0, 1)
+
 
     """
     chord = list(chord)
@@ -85,8 +89,10 @@ def get_interval_content(chord):
             else:
                 notes = chord[i:] + chord[:(i + width) % n_intervals]
             interval = sum(notes)
-            if interval < 6:
+            if interval <= 6:
                 content[interval] += 1
+    if content[6] > 1:
+        content[6] = content[6] / 2
     return tuple([content[i] for i in range(1, 7)])
 
 
@@ -95,17 +101,65 @@ def score_chord(chord):
     # From http://musiccog.ohio-state.edu/home/data/_uploaded/pdf/Music%20Perception/MP%2094Sp%20Interval-Class%20Content%20in%20Equally%20Tempered%20Pitch-Class%20Sets%20-%20Common%20Scales%20Exhibit%20optimum%20Tonal%20Consonance.pdf
     # weights = (-1.428, -0.582, 0.594, 0.386, 1.240, -0.453)
     # My tweaks
-    weights = (-1.628, 0.052, 0.971, 1.086, 1.84, -0.997)
-    n_notes = len(chord)
-    score = sum([count * weight for count, weight in zip(intervals, weights)]) / n_notes
+    weights = (-1.828, 0.15, 0.686, 0.894, 1.240, -0.403)
+
+    len_chord = len(chord)
+    n_intervals = len_chord * ((len_chord) - 1)
+
+    score = sum([count * weight for count, weight in zip(intervals, weights)]) / n_intervals
+
     # collapse rankings by number of notes a bit
-    n_notes_correction = utils.scale(6 - n_notes, -5, 5, -2.75, 2.75)
-    return score + n_notes_correction
+    # n_notes_correction = scale(6 - len_chord, -5, 5, -0.2, 0.2)
+    # score = score + n_notes_correction
+
+    # Promote and demote special chords
+    if chord == (3, 5, 4):
+        score += 0.2
+    elif chord == (3, 4, 5):
+        score += 0.1
+    elif chord == (2, 4, 3, 3):
+        score += 0.122
+    elif chord == (2, 10):
+        score += 0.18
+    elif chord == (4, 4, 4):
+        score -= 0.235
+    # elif chord == (3, 3, 6):
+    # elif chord == (3, 3, 3, 3):
+
+    return score
 
 
-def rank_chords():
-    ranked = []
+def score_chords():
+    scored = []
     for chord in get_chord_classes():
         score = score_chord(chord)
-        ranked.append((chord, score))
-    return sorted(ranked, key=lambda x: x[1], reverse=True)
+        scored.append((chord, score))
+    return sorted(scored, key=lambda x: x[1], reverse=True)
+
+
+def get_weighted_chords(more_dissonant=False):
+    scored = score_chords()
+    # filtering out everything below zero is just my choice from eyeballing the
+    # options and deciding which harmonies I probably don't want to happen in
+    # this piece.
+    scored = [(chord, score) for chord, score in scored if score > 0]
+    chords = [chord for chord, score in scored]
+    len_chords = len(chords)
+    if more_dissonant:
+        a = [1.05**i for i in range(1, len_chords - 12)]
+        b = [1.05**i for i in range(len_chords - 12, len_chords - 25, -1)]
+        weights = a + b
+    else:
+        weights = [1.175**i for i in range(1, len(chords) + 1)]
+    weights.reverse()
+    return chords, weights
+
+
+CHORDS, WEIGHTS = get_weighted_chords()
+CHORDS_DISSONANT, WEIGHTS_DISSONANT = get_weighted_chords(more_dissonant=True)
+
+
+def choose(more_dissonant=False):
+    if more_dissonant:
+        return weighted_choice(CHORDS_DISSONANT, WEIGHTS_DISSONANT)
+    return weighted_choice(CHORDS, WEIGHTS)
