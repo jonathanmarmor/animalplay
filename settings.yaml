@@ -1,11 +1,6 @@
 title: Animal Play
 subtitle: 'For violin, clarinet, cello, piano, and synthesizer'
 composer: Jonathan Marmor
-free_harmony_options: []
-drone_harmony_options: []
-rhythm_options: []
-global_setting_1: 'example'
-global_setting_2: 'hello'
 sections:
     -
         num_bars_options: [8, 4]

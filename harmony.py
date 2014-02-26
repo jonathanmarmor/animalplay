@@ -126,6 +126,9 @@ def score_chord(chord):
     # elif chord == (3, 3, 6):
     # elif chord == (3, 3, 3, 3):
 
+    # TODO do some kind of boosting if a chord occurs in the harmonic series up to 9
+
+
     return score
 
 

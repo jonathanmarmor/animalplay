@@ -1,0 +1,156 @@
+Assorted analysis of Cattle in the Woods:
+
+v    1 a q x
+v    1 a l x
+v    1 a q x
+v    1 a l x
+v    1 b q
+v    1 b l
+     1 b q
+v    1 b l
+
+v    2 a q x
+v    2 a l x
+v    2 a q x
+v    2 a l x
+v    2 b q
+v    2 b l
+     2 b q
+v    2 b l
+
+v    3 a q x
+v    3 a l x x
+v    3 a q x x x
+v    3 a l   x x
+v    3 b q     x
+v    3 b l
+     3 b q
+v    3 b l
+
+v    4 a q x
+v    4 a l x
+v    4 a q x
+v    4 a l x
+v    4 b q
+v    4 b l
+     4 b q
+v    4 b l
+
+
+number of bars per Quiet/Loud section:
+
+4 4 8 8
+4 8 4 8
+
+4 8 8 4
+8 4 8 2
+
+16 8 4 4
+8  4 4 8
+
+4 2 8 8
+8 4 2 2
+
+
+totals:
+24
+24 (48)
+
+24
+22 (46)
+
+32
+24 (56)
+
+22
+20 (42)
+
+
+overall:
+8: 14
+4: 13
+2: 4
+16: 1
+
+First half:
+8: 8
+4: 7
+2: 1
+16:
+
+Second half:
+8: 6
+4: 6
+2: 3
+16: 1
+
+
+I:
+8: 4
+4: 4
+
+II:
+8: 4
+4: 3
+2: 1
+
+III:
+8: 3
+4: 4
+2:
+16: 1
+
+IV:
+8: 3
+4: 2
+2: 3
+16:
+
+
+Drone:
+8: 7
+4: 7
+2: 1
+16: 1
+
+No Drone:
+8: 7
+4: 6
+2: 3
+16:
+
+Quiet:
+8: 7
+4: 7
+2: 1
+16: 1
+
+Loud:
+8: 7
+4: 6
+2: 3
+16:
+
+
+
+entrance and exit times of drones are variable within a few beats or bars in either direction
+
+try to choose a variety of drone entrances and exits based on how 'exposed' they are: ie, make sure there is at least one with nothing else happening at the same time (and this should happen late in the piece) and at least one that is totally buried
+
+start at the same time as another instrument starts when other instruments are sustaining
+start at the same time as another instrument starts when other instruments are resting
+start when other instruments are sustaining
+start when everyone else is resting
+
+stop at the same time as another instrument stops when other instruments are sustaining
+stop at the same time as another instrument stops when other instruments are resting
+stop when other instruments are sustaining
+stop when everyone else is resting
+
+
+
+soloist should be silent for at least a bar, sometime in the last three sections of each of the biggest sections
+
+soloist exit (fade out) time is variable
+
+

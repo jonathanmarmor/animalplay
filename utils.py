@@ -40,6 +40,7 @@ def try_f(f, args=[], kwargs={}, depth=0):
         if depth == MAX_DEPTH:
             print "Tried {} {} times. That's too many times.".format(f.__name__, MAX_DEPTH)
             raise e
+        print 'trying {} again'.format(f.__name__)
         return try_f(f, args=args, kwargs=kwargs, depth=depth)
 
 
