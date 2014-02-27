@@ -166,3 +166,45 @@ def choose(more_dissonant=False):
     if more_dissonant:
         return weighted_choice(CHORDS_DISSONANT, WEIGHTS_DISSONANT)
     return weighted_choice(CHORDS, WEIGHTS)
+
+
+def intervals_to_pcs(root, chord):
+    """
+    >>> intervals_to_pcs(10, (4, 3, 5))
+    (10, 2, 5)
+    """
+    n = root
+    out = [n]
+    for interval in chord[:-1]:
+        n = (n + interval) % 12
+        out.append(n)
+    return tuple(out)
+
+
+def rotate(drone, chord):
+    """return the chord built on the drone in all transpositions
+
+    >>> rotate(10, (4, 3, 5))
+    [(10, 2, 5), (10, 1, 6), (10, 3, 7)]
+    """
+    out = []
+    for chord in inversions(chord):
+        out.append(intervals_to_pcs(drone, chord))
+    return out
+
+
+def drone_harmonies(drone, more_dissonant=False):
+    chords = CHORDS
+    weights = WEIGHTS
+    if more_dissonant:
+        chords = CHORDS_DISSONANT
+        weights = WEIGHTS_DISSONANT
+    drone_chords = []
+    drone_weights = []
+    for i, chord in enumerate(chords):
+        weight = weights[i]
+        results = rotate(drone, chord)
+        for result in results:
+            drone_weights.append(weight)
+            drone_chords.append(result)
+    return drone_chords, drone_weights

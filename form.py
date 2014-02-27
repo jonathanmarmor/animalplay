@@ -42,21 +42,22 @@ dynamics_a = {
         'piano': 'mf'
     }
 }
+dynamics_b = {
+    'drone': 'p',
+    'quiet': {
+        'soloist': 'mf',
+        'piano': 'mp'
+    },
+    'loud': {
+        'soloist': 'ff',
+        'accompanists': 'f',
+        'piano': 'f'
+    }
+}
 dynamics = {
     'I': dynamics_a,
     'II': dynamics_a,
-    'III': {
-        'drone': 'p',
-        'quiet': {
-            'soloist': 'mf',
-            'piano': 'mp'
-        },
-        'loud': {
-            'soloist': 'ff',
-            'accompanists': 'f',
-            'piano': 'f'
-        }
-    },
+    'III': dynamics_b,
     'IV': dynamics_a
 }
 
@@ -75,7 +76,7 @@ def make_phrase(movement, drone, volume, harmony_options):
     phrase['dynamics']['drone'] = dynamics[movement]['drone']
 
     # TODO
-    # phrase['harmonic_rhythm']
+    # phrase['harmonic_rhythm'] = harmonic_rhythm.choose(phrase['n_bars'])
     # phrase['piano_rhythm']
     # phrase['soloist_rhythm']
     # if volume == 'loud':
