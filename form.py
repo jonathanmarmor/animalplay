@@ -28,8 +28,6 @@ n_bars_weights = {
     'IV': [3, 3, 2]
 }
 
-drone_options = range(12)
-
 dynamics_a = {
     'drone': 'pp',
     'quiet': {
@@ -85,7 +83,7 @@ def make_phrase(movement, drone, volume, harmony_options):
     return phrase
 
 
-def choose_fifth_drone():
+def choose_fifth_drone(drone_options):
     drone = []
     a = random.choice(drone_options)
     drone.append(a)
@@ -98,7 +96,7 @@ def choose_fifth_drone():
     drone.append(b)
     drone_options.remove(b)
     random.shuffle(drone)
-    return drone
+    return drone, drone_options
 
 
 def get_harmony_options(drone):
@@ -106,12 +104,13 @@ def get_harmony_options(drone):
 
 
 def make_form():
+    drone_options = range(12)
     form = []
     for movement in ['I', 'II', 'III', 'IV']:
         for drone in [True, None]:
             if drone:
                 if movement == 'III':
-                    drone = try_f(choose_fifth_drone)
+                    drone, drone_options = try_f(choose_fifth_drone, args=[drone_options])
                 else:
                     drone = random.choice(drone_options)
                     drone_options.remove(drone)
