@@ -66,7 +66,7 @@ def make_phrase(movement, drone, volume, harmony_options):
     phrase['n_bars'] = weighted_choice(n_bars_options[movement], n_bars_weights[movement])
     phrase['soloist'] = soloist[movement]
 
-    phrase['accompanists'] = accompanists[movement] if volume == 'loud' else None
+    phrase['accompanists'] = accompanists[movement] if volume == 'loud' else []
 
     phrase['drone'] = drone
 
