@@ -2,3 +2,5 @@ abjad
 pyyaml
 librosa
 pyzmq
+pymongo
+redis

@@ -1,61 +1,42 @@
-from form import make_form
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import datetime
 
-# def main():
-#     form = make_form()
-#     for settings in form:
-#         bars = []
-#         harmonies = []
-#         for harm_rhythm in settings['harmonic_rhythm']:
-#             bar = []
-#             for note in harm_rhythm:
+from database import Database
+from notate import notate_score, notate_parts
+from score import make_score
 
 
 class AnimalPlay(object):
-    title = 'Animal Play'
-    composer = 'Jonathan Marmor'
     def __init__(self):
-        self.form = make_form()
+        self.now = datetime.datetime.utcnow()
+        self.db = Database()
 
-        instruments = [
-            'violin',
-            'clarinet',
-            'cello',
-            'piano',
-            'synthesizer'
-        ]
+    def generate(self):
+        self.score = make_score()
+
+    def notate(self, parts=True, midi=True):
+        notate_score(self.score, self.now, midi=midi)
+        if parts:
+            notate_parts(self.score, self.now, midi=midi)
+
+    def serialize(self):
+        # TODO figure out other ways to serialize so I can reconstitute as a python object I can manipulate
+        pass
 
 
-# piece = {
-#     'violin': {
-#         'full_name': 'vln',
-#         'long_name': 'Violin',
-#         'measures': [
-#             'ending_barline_type': 'single',
-#             'time_signature': '4/4',
-#             'notes': [
-#                 {
-#                     'pitches': [61],
-#                     'duration': '16.',
-#                     'tie': 'start',
-#                     'dynamic': 'mf',
-#                     'beam': 'start',
-#                     'instruction': 'brooding',
-#                     'tempo_marking': '4 = 120',
-#                     'section_marker': '1a',
-#                     'breath': True,
-#                     'gliss': 'start',
-#                     ''
-#                 },
+def run(parts=True, midi=True):
+    animalplay = AnimalPlay()
+    animalplay.generate()
+    animalplay.notate(midi=midi, parts=parts)
 
-#             ]
 
-#         ]
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--no-midi', dest='midi', action='store_false', default=True)
+    parser.add_argument('--no-parts', dest='parts', action='store_false', default=True)
+    args = parser.parse_args()
 
-#     }
-#     'clarinet':
-#     'cello':
-#     'piano':
-#     'synthesizer':
-# }
-
+    run(parts=args.parts, midi=args.midi)
