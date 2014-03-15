@@ -35,8 +35,10 @@ def run(parts=True, midi=True):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--no-midi', dest='midi', action='store_false', default=True)
-    parser.add_argument('--no-parts', dest='parts', action='store_false', default=True)
+    parser.add_argument('--no-midi', dest='midi', action='store_false',
+        default=True, help='Do not make midi files.')
+    parser.add_argument('--no-parts', dest='parts', action='store_false',
+        default=True, help='Do not make instrument parts. Make the score only.')
     args = parser.parse_args()
 
     run(parts=args.parts, midi=args.midi)
