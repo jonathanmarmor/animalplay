@@ -68,7 +68,7 @@ def get_synthesizer_staff():
     attach(clef, staff)
     synth = Instrument(
         instrument_name='Synthesizer',
-        short_instrument_name='Synth'
+        short_instrument_name='Syn'
     )
     attach(synth, staff)
     add_time_signature(staff)
@@ -78,8 +78,7 @@ def get_synthesizer_staff():
 
 def make_score():
     violin_staff = get_melody_staff(Violin, 'Violin', 'Vn')
-    clarinet_staff = get_melody_staff(ClarinetInBFlat,
-            'Bb Clarinet', 'Cl')
+    clarinet_staff = get_melody_staff(ClarinetInBFlat, 'Bb Clarinet', 'Cl')
     cello_staff = get_melody_staff(Cello, 'Cello', 'Vc')
     piano_staff = get_piano_staff()
     synth_staff = get_synthesizer_staff()
