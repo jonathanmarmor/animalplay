@@ -3,9 +3,12 @@
 
 import datetime
 
+from abjad import Measure, TimeSignature, Rest, Duration
+
 from database import Database
 from notate import notate_score, notate_parts
 from score import make_score
+from form import make_form
 
 
 class AnimalPlay(object):
@@ -15,6 +18,29 @@ class AnimalPlay(object):
 
     def generate(self):
         self.score = make_score()
+        self.staves = []
+        for staff in self.score:
+            if staff.name == 'Piano':
+                for s in staff:
+                    self.staves.append(s)
+            else:
+                self.staves.append(staff)
+        self.form = make_form()
+
+        n = 0
+        for staff in self.staves:
+            print staff.name
+            for phrase in self.form:
+                print '-'* 20
+                for _ in range(phrase['n_bars']):
+                    print n
+                    n += 1
+                    empty = Measure(TimeSignature((4, 4)), [Rest(Duration(1, 1))])
+                    staff.append(empty)
+
+
+
+
 
     def notate(self, parts=True, midi=True):
         notate_score(self.score, self.now, midi=midi)

@@ -4,31 +4,12 @@ import random
 
 from utils import weighted_choice, try_f, AnimalPlayException
 
-
-soloist = {
-    'I': 'violin',
-    'II': 'violin',
-    'III': 'clarinet',
-    'IV': 'cello'
-}
-accompanists = {
-    'I': ['clarinet', 'cello'],
-    'II': ['clarinet', 'cello'],
-    'III': ['violin', 'cello'],
-    'IV': ['clarinet', 'violin']
-}
-n_bars_options = {
-    'I': [8, 4],
-    'II': [8, 4, 2],
-    'III': [4, 8, 16, 2],
-    'IV': [8, 2, 4],
-}
-n_bars_weights = {
-    'I': [1, 1],
-    'II': [8, 7, 1],
-    'III': [14, 11, 6, 1],
-    'IV': [3, 3, 2]
-}
+movements = range(4)
+soloist = ('Violin', 'Violin', 'Bb Clarinet', 'Cello')
+accompanists = (('Bb Clarinet', 'Cello'), ('Bb Clarinet', 'Cello'),
+    ('Violin', 'Cello'), ('Bb Clarinet', 'Violin'))
+n_bars_options = ((8, 4), (8, 4, 2), (4, 8, 16, 2), (8, 2, 4))
+n_bars_weights = ((1, 1), (8, 7, 1), (14, 11, 6, 1), (3, 3, 2))
 
 dynamics_a = {
     'drone': 'pp',
@@ -54,12 +35,7 @@ dynamics_b = {
         'piano': 'f'
     }
 }
-dynamics = {
-    'I': dynamics_a,
-    'II': dynamics_a,
-    'III': dynamics_b,
-    'IV': dynamics_a
-}
+dynamics = [dynamics_a, dynamics_a, dynamics_b, dynamics_a]
 
 
 def make_phrase(movement, drone, volume, harmony_options):
@@ -68,7 +44,7 @@ def make_phrase(movement, drone, volume, harmony_options):
     phrase['n_bars'] = weighted_choice(n_bars_options[movement], n_bars_weights[movement])
     phrase['soloist'] = soloist[movement]
 
-    phrase['accompanists'] = accompanists[movement] if volume == 'loud' else []
+    phrase['accompanists'] = accompanists[movement] if volume == 'loud' else ()
 
     phrase['drone'] = drone
 
@@ -85,20 +61,30 @@ def make_phrase(movement, drone, volume, harmony_options):
     return phrase
 
 
-def choose_fifth_drone(drone_options):
+def choose_fifth_drone(options):
+    options = options[:]
     drone = []
-    a = random.choice(drone_options)
+    a = random.choice(options)
     drone.append(a)
-    drone_options.remove(a)
+    options.remove(a)
     b = (a + 7) % 12
-    if b not in drone_options:
+    if b not in options:
         b = (a + 5) % 12
-        if b not in drone_options:
+        if b not in options:
             raise AnimalPlayException('A fifth in either direction is not available for this drone.')
     drone.append(b)
-    drone_options.remove(b)
     random.shuffle(drone)
-    return drone, drone_options
+    return drone
+
+
+def choose_drones():
+    options = range(12)
+    drones = random.sample(options, 3)
+    [options.remove(d) for d in drones]
+    fifth = try_f(choose_fifth_drone, args=[options])
+    random.shuffle(fifth)
+    drones.insert(2, fifth)
+    return drones
 
 
 def get_harmony_options(drone):
@@ -106,16 +92,12 @@ def get_harmony_options(drone):
 
 
 def make_form():
-    drone_options = range(12)
+    drones = choose_drones()
     form = []
-    for movement in ['I', 'II', 'III', 'IV']:
+    for movement in movements:
         for drone in [True, None]:
             if drone:
-                if movement == 'III':
-                    drone, drone_options = try_f(choose_fifth_drone, args=[drone_options])
-                else:
-                    drone = random.choice(drone_options)
-                    drone_options.remove(drone)
+                drone = drones[movement]
             harmony_options = get_harmony_options(drone)
             for volume in ['quiet', 'loud', 'quiet', 'loud']:
                 phrase = try_f(make_phrase, args=[movement, drone, volume, harmony_options])

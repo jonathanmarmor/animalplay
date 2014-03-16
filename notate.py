@@ -12,10 +12,10 @@ def make_lilypond_file(score, now, subtitle=None):
     composer = 'Jonathan Marmor'
 
     lilypond_file = lilypondfiletools.make_basic_lilypond_file(score)
-    lilypond_file.header_block.title = title
+    lilypond_file.header_block.title = Markup(title)
     if subtitle:
         lilypond_file.header_block.subtitle = Markup(subtitle)
-    lilypond_file.header_block.composer = composer
+    lilypond_file.header_block.composer = Markup(composer)
 
     footer_title = title
     if subtitle:
@@ -67,14 +67,14 @@ def make_pdf(ly_file_path, output_filepath):
     process.wait()
 
 
-def make_midi(lilypond_file, filepath):
+def make_midi(lilypond_file, output_filepath):
     lilypond_file.score_block.append(lilypondfiletools.MIDIBlock())
-    midi_ly_file_path = '{}-midi.{}'.format(filepath, 'ly')
+    midi_ly_file_path = '{}-midi.{}'.format(output_filepath, 'ly')
     with open(midi_ly_file_path, 'w') as temp_file:
         temp_file.write(format(lilypond_file))
 
     process = subprocess.Popen(['lilypond',
-        '--output={}'.format(filepath), midi_ly_file_path], shell=False)
+        '--output={}'.format(output_filepath), midi_ly_file_path], shell=False)
     process.wait()
     os.remove(midi_ly_file_path)
 
