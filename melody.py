@@ -11,6 +11,10 @@
 
 # 0, 2, 3, 2, 3, 2, 1, 10, 10, 5
 
+
+from abjad import Note, Pitch
+
+
 rhtyhm_options = [
     (4,),
     (2, 2),
@@ -25,3 +29,11 @@ rhtyhm_options = [
 
 def choose(n_bars):
     return [random.choice(options) for _ in xrange(n_bars)]
+
+
+def get_melody():
+    melody = []
+
+
+
+    return melody

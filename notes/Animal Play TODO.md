@@ -1,5 +1,13 @@
 # Animal Play TODO
 
+0. Fix notating drones
+0.1 Tie drones
+1. Figure out tempo
+2. Make some harmonic rhythm figures
+
+
+
+
 ## Melody
 
 ### To Transcribe

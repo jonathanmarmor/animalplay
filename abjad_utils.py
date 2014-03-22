@@ -1,6 +1,6 @@
 from abjad import attach
 from abjad import (Measure, TimeSignature, Rest, Chord, Duration, Container)
-from abjad.tools.spannertools import Tie
+from abjad.tools.spannertools import Tie, Beam
 
 
 def get_empty_bar():
@@ -15,6 +15,10 @@ def get_note(notes, duration):
 
 def tie(notes):
     attach(Tie(), notes)
+
+
+def beam(notes):
+    attach(Beam(), notes)
 
 
 def container(items, is_simultaneous=False):
