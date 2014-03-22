@@ -41,7 +41,6 @@ class AnimalPlay(object):
     def setup(self):
         self.score = make_score()
 
-        # self.staves = container(staves, is_simultaneous=True)
         self.staves = Container()
         self.staves.is_simultaneous = True
         for staff in self.score:
@@ -78,7 +77,13 @@ if __name__ == '__main__':
     parser.add_argument('--no-midi', dest='midi', action='store_false',
         default=True, help='Do not make midi files.')
     parser.add_argument('--no-parts', dest='parts', action='store_false',
-        default=True, help='Do not make instrument parts. Make the score only.')
+        default=True, help='Do not make instrument parts.')
+    parser.add_argument('--score', '-s', dest='score', action='store_true',
+        default=False, help='Make the score PDF only.')
     args = parser.parse_args()
+
+    if args.score:
+        args.parts = False
+        args.midi = False
 
     run(parts=args.parts, midi=args.midi)

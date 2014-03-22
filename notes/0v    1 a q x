@@ -1,0 +1,35 @@
+0v    1 a q x
+v    1 a l x
+v    1 a q x
+v    1 a l x
+0v    1 b q
+v    1 b l
+     1 b q
+v    1 b l
+
+0v    2 a q x
+v    2 a l x
+v    2 a q x
+v    2 a l x
++5 beats v    2 b q
+v    2 b l
+     2 b q
+v    2 b l
+
++9 beats v    3 a q x
+v    3 a l x x
+v    3 a q x x x
+v    3 a l   x x
++12 beats v    3 b q     x
+v    3 b l
+     3 b q
+v    3 b l
+
+0 v    4 a q x
+v    4 a l x
+v    4 a q x
+v    4 a l x
+- 6 beats v    4 b q
+v    4 b l
+     4 b q
+v    4 b l

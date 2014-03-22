@@ -1,0 +1,51 @@
+v    1 a q x
+v    1 a l x
+v    1 a q x
+v    1 a l x
+v    1 b q
+v    1 b l   - soloist can exit halfway through this section
+     1 b q
+v    1 b l   - soloist must exit by second to last bar of this section
+             - soloist must enter again by last bar of this section
+
+
+in phrase 6:
+    - start asking if soloist should exit
+
+find number of bars in phrases 6, 7, and 8
+
+for each bar starting halfway through
+
+bars[-((len(phrases[5]) / 2)) + len(phrases[6]) + len(phrases[7])]
+
+
+
+
+
+
+v    2 a q x
+v    2 a l x
+v    2 a q x
+v    2 a l x
+v    2 b q
+v    2 b l
+     2 b q
+v    2 b l
+
+v    3 a q x
+v    3 a l x x
+v    3 a q x x x
+v    3 a l   x x
+v    3 b q     x
+v    3 b l
+     3 b q
+v    3 b l
+
+v    4 a q x
+v    4 a l x
+v    4 a q x
+v    4 a l x
+v    4 b q
+v    4 b l
+     4 b q
+v    4 b l

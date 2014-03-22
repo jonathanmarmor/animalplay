@@ -1,0 +1,11 @@
+for movement in movements:
+    for phrase in movement:
+
+
+    movement[5]['n_bars'] / 2]
+    movement[5]['bars'][['global_bar_number']
+
+
+a = movements
+first_can_exit = a[0][5]['bars'][a[0][5]['n_bars'] / 2]['global_bar_number']
+last_bar = a[0][-1]['bars'][-1]['global_bar_number']
