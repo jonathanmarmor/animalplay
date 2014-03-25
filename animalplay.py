@@ -131,7 +131,6 @@ class AnimalPlay(object):
 
 def run(parts=True, midi=True):
     animalplay = AnimalPlay()
-    animalplay.generate()
     animalplay.notate(midi=midi, parts=parts)
 
 

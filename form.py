@@ -116,10 +116,13 @@ class Form(object):
         synth = self.score['Synthesizer']
         synth.extend([bar['measure'] for bar in self.bars])
 
-    def make_harmonic_rhythm(self):
-        self.harmonic_rhythm = []
+    # def make_harmonic_rhythm(self):
+    #     self.harmonic_rhythm = []
+    #     for bar in self.bars:
+    #         hr = harmonic_rhythm.choose()
+    #         bar['measure'] = Measure(TimeSignature((4, 4)), [Chord()])
 
 
-    def make_piano(self):
-        pass
+    # def make_piano(self):
+    #     pass
 
