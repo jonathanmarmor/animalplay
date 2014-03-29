@@ -2,6 +2,11 @@ from abjad import attach
 from abjad import (Measure, TimeSignature, Rest, Chord, Duration, Container)
 from abjad.tools.spannertools import Tie, Beam
 
+# from abjad.tools.markuptools import Markup
+# from abjad.tools.spannertools import TextScriptSpanner
+from abjad.tools.indicatortools import LilyPondCommand
+from abjad.tools.indicatortools import Dynamic
+from abjad.tools.indicatortools import BarLine
 
 def get_rest_bar(numerator=4, denominator=4):
     return Measure(TimeSignature((numerator, denominator)), [Rest(Duration(1, 1))])
@@ -43,3 +48,20 @@ def container(items, is_simultaneous=False):
         items = [items]
     c.extend(items)
     return c
+
+
+def add_rehearsal_mark(measure):
+    command = LilyPondCommand(r'mark \default', 'before')
+    attach(command, measure)
+
+
+def add_dynamic(item, dynamic):
+    attach(Dynamic(dynamic), item)
+
+
+def add_final_barline(staff):
+    attach(BarLine('|.'), staff[-1][-1])
+
+
+def add_double_barline(item):
+    attach(BarLine('||'), item)
