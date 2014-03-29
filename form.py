@@ -5,7 +5,7 @@ from itertools import groupby
 
 from utils import weighted_choice, try_f, AnimalPlayException
 from abjad_utils import get_rest_bar, get_one_note_bar, tie
-import harmonic_rhythm
+# import harmonic_rhythm
 
 
 class Conf(object):
@@ -77,11 +77,11 @@ class Form(object):
         self.drones = choose_drones()
 
         self.make_bars()
+        self.group_sections()
         self.make_drones()
 
 
     def make_bars(self):
-        self.bars = []
         for movement_number in Conf.movements:
             for drone in [True, None]:
                 if drone:
@@ -89,7 +89,7 @@ class Form(object):
                 for volume in ['q1', 'l1', 'q2', 'l2']:
                     n_bars = weighted_choice(Conf.n_bars_options[movement_number], Conf.n_bars_weights[movement_number])
                     for bar_number in range(n_bars):
-                        d = dict(
+                        bar = dict(
                             movement_number=movement_number,
                             drone=drone,
                             volume=volume,
@@ -98,15 +98,23 @@ class Form(object):
                             accompanists=Conf.accompanists[movement_number] if volume.startswith('l') else (),
                             dynamics = Conf.dynamics[movement_number][volume[0]],
                         )
-                        d['dynamics']['drone'] = Conf.dynamics[movement_number]['drone']
-                        self.bars.append(d)
+                        bar['dynamics']['drone'] = Conf.dynamics[movement_number]['drone']
+                        self.bars.append(bar)
+
+    def group_section(self, attr):
+        return [list(group) for key, group in groupby(self.bars, lambda x: x[attr])]
+
+    def group_sections(self):
+        self.movement_sections = self.group_section('movement_number')
+        self.drone_sections = self.group_section('drone')
+        self.volume_sections = self.group_section('volume')
 
     def make_drones(self):
-        for drone, bars in groupby(self.bars, lambda x: x['drone']):
+        for bars in self.drone_sections:
+            drone = bars[0]['drone']
             if drone != None:
-                bars = list(bars)
                 for bar in bars:
-                    bar['measure'] = get_one_note_bar(bar['drone'])
+                    bar['measure'] = get_one_note_bar(drone)
                 bars = [b['measure'] for b in bars]
                 tie(bars)
             else:
