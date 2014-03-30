@@ -3,7 +3,7 @@
 import itertools
 from collections import Counter
 
-from utils import weighted_choice
+from utils import weighted_choice, pairwise
 
 
 def partitions(n):
@@ -183,6 +183,23 @@ def intervals_to_pcs(root, chord):
     return tuple(out)
 
 
+def pitches_to_intervals(chord):
+    """
+    >>> pitches_to_intervals([12, 16, 31])
+    [4, 3, 5]
+    """
+    # TODO rewrite this
+    pcs = sorted(list(set([p % 12 for p in chord])))
+    pcs = [p - pcs[0] for p in pcs]
+    pcs.reverse()
+    pcs.insert(0, 12)
+    intervals = []
+    for a, b in pairwise(pcs):
+        intervals.append(a - b)
+    intervals.reverse()
+    return intervals
+
+
 def rotate(drone, chord):
     """return the chord built on the drone in all transpositions
 
@@ -210,3 +227,4 @@ def drone_harmonies(drone, more_dissonant=False):
             drone_weights.append(weight)
             drone_chords.append(result)
     return drone_chords, drone_weights
+

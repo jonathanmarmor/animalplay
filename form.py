@@ -15,7 +15,7 @@ from abjad_utils import (
     add_final_barline,
     add_double_barline,
 )
-# import harmonic_rhythm
+import harmonic_rhythm
 
 
 class Conf(object):
@@ -94,6 +94,8 @@ class Form(object):
         self.temp_fill_with_rests()
 
         self.make_drones()
+
+        self.make_harmonic_rhythm()
 
         self.add_rehearsal_marks()
         self.add_dynamics()
@@ -205,17 +207,16 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        staves = [s for s in self.staves if s.name != 'Synthesizer']
+        no = ['Synthesizer', 'Piano upper']
+        staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
             for bar in self.bars:
                 staff.append(get_rest_bar())
 
-    # def make_harmonic_rhythm(self):
-    #     self.harmonic_rhythm = []
-    #     for bar in self.bars:
-    #         hr = harmonic_rhythm.choose()
-    #         bar['measure'] = Measure(TimeSignature((4, 4)), [Chord()])
+    def make_harmonic_rhythm(self):
+        piano_upper = self.score['Piano'][0]
+        for phrase in self.volume_sections:
+            bars = harmonic_rhythm.choose(phrase)
+            for bar in bars:
+                piano_upper.append(bar)
 
-
-    # def make_piano(self):
-    #     pass
