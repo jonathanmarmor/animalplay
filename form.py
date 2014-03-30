@@ -231,11 +231,11 @@ class Form(object):
             drone = bar_config['drone']
             bar_index = bar_config['bar_index']
 
+            bar_config['harmonies'] = []
+
             for i, dur in enumerate(bar_config['harmonic_rhythm']):
                 chord = piano_upper[bar_index][i]
 
                 harm = self.harmony.choose(drone)
-
-
+                bar_config['harmonies'].append(harm)
                 chord.note_heads.extend(harm)
-
