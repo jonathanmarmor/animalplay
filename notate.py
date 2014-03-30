@@ -67,11 +67,37 @@ def make_pdf(ly_file_path, output_filepath):
     process.wait()
 
 
+def add_midi_instruments(file_contents):
+    inst_map = {
+        'Vn': 'violin',
+        'Cl': 'clarinet',
+        'Vc': 'cello',
+        'Pno': 'acoustic grand',
+        'Syn': 'recorder'
+    }
+    new_lines = []
+    lines = file_contents.split('\n')
+    print lines
+    for line in lines:
+        if 'shortInstrumentName' in line:
+            for short_name in inst_map:
+                if short_name in line:
+                    midi_name = inst_map[short_name]
+                    midi_line = '\\set Staff.midiInstrument = #"{}"'.format(midi_name)
+                    line = '{}\n{}'.format(line, midi_line)
+        new_lines.append(line)
+    return '\n'.join(new_lines)
+
+
 def make_midi(lilypond_file, output_filepath):
     lilypond_file.score_block.append(lilypondfiletools.MIDIBlock())
     midi_ly_file_path = '{}-midi.{}'.format(output_filepath, 'ly')
+    file_contents = format(lilypond_file)
+
+    file_contents = add_midi_instruments(file_contents)
+
     with open(midi_ly_file_path, 'w') as temp_file:
-        temp_file.write(format(lilypond_file))
+        temp_file.write(file_contents)
 
     process = subprocess.Popen(['lilypond',
         '--output={}'.format(output_filepath), midi_ly_file_path], shell=False)
