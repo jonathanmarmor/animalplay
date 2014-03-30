@@ -2,6 +2,7 @@
 
 import itertools
 from collections import Counter
+import random
 
 from utils import weighted_choice, pairwise
 
@@ -163,11 +164,25 @@ def get_weighted_chords(more_dissonant=False):
 CHORDS, WEIGHTS = get_weighted_chords()
 CHORDS_DISSONANT, WEIGHTS_DISSONANT = get_weighted_chords(more_dissonant=True)
 
+# def build_drone_chords():
 
-def choose(more_dissonant=False):
+# DRONE_CHORDS = build_drone_chords(drones):
+
+
+def choose(drone=None, more_dissonant=False):
+    if drone:
+        pass
+
     if more_dissonant:
         return weighted_choice(CHORDS_DISSONANT, WEIGHTS_DISSONANT)
-    return weighted_choice(CHORDS, WEIGHTS)
+    chord_type = weighted_choice(CHORDS, WEIGHTS)
+    root = random.choice(range(12))
+
+    chord = [root]
+    for interval in chord_type[:-1]:
+        chord.append((chord[-1] + interval) % 12)
+
+    return chord
 
 
 def intervals_to_pcs(root, chord):

@@ -16,6 +16,7 @@ from abjad_utils import (
     add_double_barline,
 )
 import harmonic_rhythm
+import harmony
 
 
 class Conf(object):
@@ -224,7 +225,13 @@ class Form(object):
 
     def choose_harmonies(self):
         piano_upper = self.score['Piano'][0]
-        for bar in piano_upper:
-            for chord in bar:
-                chord.note_heads.extend([0, 4, 7])
+        for bar_config in self.bars:
+            drone = bar_config['drone']
+            bar_index = bar_config['bar_index']
+
+            for i, dur in enumerate(bar_config['harmonic_rhythm']):
+                chord = piano_upper[bar_index][i]
+
+                harm = harmony.choose(drone)
+                chord.note_heads.extend(harm)
 
