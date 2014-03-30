@@ -77,7 +77,6 @@ def add_midi_instruments(file_contents):
     }
     new_lines = []
     lines = file_contents.split('\n')
-    print lines
     for line in lines:
         if 'shortInstrumentName' in line:
             for short_name in inst_map:

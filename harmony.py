@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import itertools
-from collections import Counter
+from collections import Counter, defaultdict
 import random
 
 from utils import weighted_choice, pairwise
@@ -161,28 +161,36 @@ def get_weighted_chords(more_dissonant=False):
     return chords, weights
 
 
-CHORDS, WEIGHTS = get_weighted_chords()
-CHORDS_DISSONANT, WEIGHTS_DISSONANT = get_weighted_chords(more_dissonant=True)
+def build_chord_type_on_root(root, chord_type):
+    """
+    >>> build_chord_type_on_root(9, [4, 3, 5])
+    [9, 1, 4]
 
-# def build_drone_chords():
-
-# DRONE_CHORDS = build_drone_chords(drones):
-
-
-def choose(drone=None, more_dissonant=False):
-    if drone:
-        pass
-
-    if more_dissonant:
-        return weighted_choice(CHORDS_DISSONANT, WEIGHTS_DISSONANT)
-    chord_type = weighted_choice(CHORDS, WEIGHTS)
-    root = random.choice(range(12))
-
+    """
     chord = [root]
     for interval in chord_type[:-1]:
         chord.append((chord[-1] + interval) % 12)
-
     return chord
+
+
+def build_chord_type_on_all_roots(chord_type):
+    """
+    >>> build_chord_type_on_all_roots([4, 3, 5])
+    [[0, 4, 7],
+     [1, 5, 8],
+     [2, 6, 9],
+     [3, 7, 10],
+     [4, 8, 11],
+     [5, 9, 0],
+     [6, 10, 1],
+     [7, 11, 2],
+     [8, 0, 3],
+     [9, 1, 4],
+     [10, 2, 5],
+     [11, 3, 6]]
+
+    """
+    return [build_chord_type_on_root(root, chord_type) for root in range(12)]
 
 
 def intervals_to_pcs(root, chord):
@@ -227,19 +235,42 @@ def rotate(drone, chord):
     return out
 
 
-def drone_harmonies(drone, more_dissonant=False):
-    chords = CHORDS
-    weights = WEIGHTS
-    if more_dissonant:
-        chords = CHORDS_DISSONANT
-        weights = WEIGHTS_DISSONANT
-    drone_chords = []
-    drone_weights = []
-    for i, chord in enumerate(chords):
-        weight = weights[i]
-        results = rotate(drone, chord)
-        for result in results:
-            drone_weights.append(weight)
-            drone_chords.append(result)
-    return drone_chords, drone_weights
+class Harmony(object):
+    def __init__(self, drones):
+        self.drones = drones
+        self.CHORDS, self.WEIGHTS = get_weighted_chords()
+        self.build_drone_chords()
 
+    def choose(self, drone=None):
+        if drone:
+            return weighted_choice(self.DRONE_CHORDS[drone], self.DRONE_WEIGHTS[drone])
+        chord_type = weighted_choice(self.CHORDS, self.WEIGHTS)
+        root = random.choice(range(12))
+        return build_chord_type_on_root(root, chord_type)
+
+    def build_drone_chords(self):
+        self.DRONE_CHORDS = defaultdict(list)
+        self.DRONE_WEIGHTS = defaultdict(list)
+
+        drones = []
+        for drone in self.drones:
+            if isinstance(drone, tuple):
+                for p in drone:
+                    drones.append(p)
+            drones.append(drone)
+
+        for drone in drones:
+            for i, chord_type in enumerate(self.CHORDS):
+                weight = self.WEIGHTS[i]
+                # Build chord on all 12 roots
+                chords = build_chord_type_on_all_roots(chord_type)
+                for chord in chords:
+                    if isinstance(drone, tuple):
+                        # check each if it contains all pitches in drone
+                        if all([pitch in chord for pitch in drone]):
+                            self.DRONE_CHORDS[drone].append(chord)
+                            self.DRONE_WEIGHTS[drone].append(weight)
+                    else:
+                        if drone in chord:
+                            self.DRONE_CHORDS[drone].append(chord)
+                            self.DRONE_WEIGHTS[drone].append(weight)

@@ -16,7 +16,7 @@ from abjad_utils import (
     add_double_barline,
 )
 import harmonic_rhythm
-import harmony
+from harmony import Harmony
 
 
 class Conf(object):
@@ -67,7 +67,8 @@ def choose_fifth_drone(options):
         if b not in options:
             raise AnimalPlayException('A fifth in either direction is not available for this drone.')
     drone.append(b)
-    random.shuffle(drone)
+    drone.sort()
+    drone = tuple(drone)
     return drone
 
 
@@ -76,7 +77,6 @@ def choose_drones():
     drones = random.sample(options, 3)
     [options.remove(d) for d in drones]
     fifth = try_f(choose_fifth_drone, args=[options])
-    random.shuffle(fifth)
     drones.insert(2, fifth)
     return drones
 
@@ -87,6 +87,8 @@ class Form(object):
         self.bars = []
 
         self.drones = choose_drones()
+
+        self.harmony = Harmony(self.drones)
 
         self.make_bars()
         self.group_sections()
@@ -232,6 +234,8 @@ class Form(object):
             for i, dur in enumerate(bar_config['harmonic_rhythm']):
                 chord = piano_upper[bar_index][i]
 
-                harm = harmony.choose(drone)
+                harm = self.harmony.choose(drone)
+
+
                 chord.note_heads.extend(harm)
 
