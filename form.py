@@ -97,6 +97,8 @@ class Form(object):
 
         self.make_harmonic_rhythm()
 
+        self.choose_harmonies()
+
         self.add_rehearsal_marks()
         self.add_dynamics()
         self.add_double_barlines()
@@ -219,4 +221,10 @@ class Form(object):
             bars = harmonic_rhythm.choose(phrase)
             for bar in bars:
                 piano_upper.append(bar)
+
+    def choose_harmonies(self):
+        piano_upper = self.score['Piano'][0]
+        for bar in piano_upper:
+            for chord in bar:
+                chord.note_heads.extend([0, 4, 7])
 
