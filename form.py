@@ -108,6 +108,8 @@ class Form(object):
         self.choose_harmonies()
         self.make_bassline()
 
+        self.make_accompaniment()
+
         self.add_rehearsal_marks()
         self.add_dynamics()
         self.add_double_barlines()
@@ -413,3 +415,28 @@ class Form(object):
         bar['drone'] = None
         i = bar['bar_index']
         synth[i] = get_rest_bar()
+
+    def make_accompaniment(self):
+        for bar_config in self.bars:
+            accompanists = bar_config['accompanists']
+            if accompanists:
+                a_name, b_name = accompanists
+                a = self.score[a_name]
+                b = self.score[b_name]
+
+                harmonies = bar_config['harmonies']
+                harmonic_rhythm = bar_config['harmonic_rhythm']
+
+                a_pitches = []
+                b_pitches = []
+                for i, h in enumerate(harmonies):
+                    a_pitch = random.choice(h)
+                    a_pitches.append(a_pitch)
+                    b_pitch = random.choice(h)
+                    b_pitches.append(b_pitch)
+
+                bar_config['{}_pitches'.format(a_name)] = a_pitches
+                bar_config['{}_pitches'.format(b_name)] = b_pitches
+
+                a[bar_config['bar_index']] = get_bar(harmonic_rhythm, a_pitches)
+                b[bar_config['bar_index']] = get_bar(harmonic_rhythm, b_pitches)
