@@ -1,0 +1,26 @@
+x - build drone harmony options for each pitch in drone #3
+x - save harmonies as a list of lists of pitch classes in the bar_configs
+x - make bass line
+x - adjust soloist/accompaniment settings based on soloist entrances and exists
+
+- adjust drone entrances and exits in bar_configs and synth part
+
+- make accompaniment lines
+
+- choose density of out of tune notes
+- make soloist part
+
+- ornaments in soloist part
+
+- double stops in accompaniment parts
+- out of tune notes in accompaniment parts
+
+- add more harmonic rhythm options
+- use alternate rhythms in soloist, accompaniment, and piano left hand
+
+- clarinet part in Bb
+- diminuendo and crescendo in soloist parts
+
+- pick actual notes for piano right hand
+
+- last two bars should have some sort of rhythmic ending (half half whole for example)
