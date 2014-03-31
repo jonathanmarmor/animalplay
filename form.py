@@ -98,13 +98,6 @@ class Form(object):
 
         self.adjust_soloist_entrances()
 
-        movement = None
-        for b in self.bars:
-            if movement != b['movement_name']:
-                movement = b['movement_name']
-                print movement
-            print b['soloist'], b['accompanists']
-
         self.temp_fill_with_rests()
 
         self.make_drones()
@@ -186,7 +179,7 @@ class Form(object):
                 else:
                     add_rehearsal_mark(staff[first_bar_index])
 
-    def add_dynamics(self):
+    def add_piano_dynamics(self):
         piano = self.score['Piano'][1]
         for section in self.volume_sections:
             first_bar_conf = section[0]
@@ -195,7 +188,7 @@ class Form(object):
             piano_first_note = piano[bar_index][0]
             add_dynamic(piano_first_note, first_bar_conf['dynamics']['piano'])
 
-
+    def add_soloist_dynamics(self):
         dynamic = None
         previous_soloist = None
         for bar in self.bars:
@@ -210,25 +203,16 @@ class Form(object):
                     first_note = soloist[i][0]
                     add_dynamic(first_note, dynamic)
 
+    def add_accompanists_dynamics(self):
+        for section in self.volume_sections:
+            first_bar_conf = section[0]
+            bar_index = first_bar_conf['bar_index']
+            for acc_name in first_bar_conf['accompanists']:
+                acc = self.score[acc_name]
+                first_note = acc[bar_index][0]
+                add_dynamic(first_note, first_bar_conf['dynamics']['accompanists'])
 
-
-
-
-
-            # first_bar_conf = section[0]
-            # bar_index = first_bar_conf['bar_index']
-
-            # soloist = self.score[first_bar_conf['soloist']]
-            # soloist_first_note = soloist[bar_index][0]
-            # add_dynamic(soloist_first_note, first_bar_conf['dynamics']['soloist'])
-
-            # for acc_name in first_bar_conf['accompanists']:
-            #     acc = self.score[acc_name]
-            #     first_note = acc[bar_index][0]
-            #     add_dynamic(first_note, first_bar_conf['dynamics']['accompanists'])
-
-
-
+    def add_synth_dynamics(self):
         synth = self.score['Synthesizer']
         # TODO use the section where the drone is actually sounding, not the square section
         for section in self.drone_sections:
@@ -237,6 +221,12 @@ class Form(object):
             synth_first_note = synth[bar_index][0]
             if not isinstance(synth_first_note, Rest):
                 add_dynamic(synth_first_note, first_bar_conf['dynamics']['drone'])
+
+    def add_dynamics(self):
+        self.add_piano_dynamics()
+        self.add_soloist_dynamics()
+        self.add_accompanists_dynamics()
+        self.add_synth_dynamics()
 
     def add_double_barlines(self):
         for section in self.volume_sections[:-1]:
