@@ -102,6 +102,9 @@ class Form(object):
 
         self.make_drones()
         self.make_harmonic_rhythm()
+
+        self.adjust_drone_timings()
+
         self.choose_harmonies()
         self.make_bassline()
 
@@ -336,3 +339,21 @@ class Form(object):
 
             for bar in last_section[len(last_section) / 2:]:
                 bar['soloist'] = next_soloist
+
+    def adjust_drone_timings(self):
+        synth = self.score['Synthesizer']
+
+        # End of second drone
+        choice = random.choice([0, 1, 2])
+        print choice
+        if choice == 0:
+            bar = self.drone_sections[2][-1]
+            bar['drone'] = None
+            i = bar['bar_index']
+            synth[i] = get_rest_bar()
+        # Do nothing if choice == 1
+        elif choice == 2:
+            bar = self.drone_sections[3][0]
+            bar['drone'] = self.drones[1]
+            i = bar['bar_index']
+            synth[i] = get_bar([16], [bar['drone']])

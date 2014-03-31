@@ -26,9 +26,12 @@ def get_bar(durations, pitches=None):
         pitches = [[] for _ in durations]
     chords = []
     for dur, p in zip(durations, pitches):
-        if isinstance(p, int):
-            p = [p]
-        chord = Chord(p, Duration(dur, 16))
+        if p == 'r':
+            chord = Rest(Duration(dur, 16))
+        else:
+            if isinstance(p, int):
+                p = [p]
+            chord = Chord(p, Duration(dur, 16))
         chords.append(chord)
     return Measure(TimeSignature((4, 4)), chords)
 
