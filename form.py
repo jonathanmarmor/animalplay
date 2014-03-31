@@ -357,3 +357,17 @@ class Form(object):
             bar['drone'] = self.drones[1]
             i = bar['bar_index']
             synth[i] = get_bar([16], [bar['drone']])
+
+        # Start of third drone A
+
+        # Start of third drone B
+
+        # End of third drone A
+
+        # End of third drone B
+
+        # End of fourth drone
+        bar = self.drone_sections[6][-1]
+        bar['drone'] = None
+        i = bar['bar_index']
+        synth[i] = get_rest_bar()
