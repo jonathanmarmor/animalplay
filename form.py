@@ -14,9 +14,11 @@ from abjad_utils import (
     add_dynamic,
     add_final_barline,
     add_double_barline,
+    get_bar
 )
 import harmonic_rhythm
 from harmony import Harmony
+from piano import next_piano_bass_note
 
 
 class Conf(object):
@@ -97,10 +99,10 @@ class Form(object):
         self.temp_fill_with_rests()
 
         self.make_drones()
-
         self.make_harmonic_rhythm()
-
         self.choose_harmonies()
+
+        self.make_bassline()
 
         self.add_rehearsal_marks()
         self.add_dynamics()
@@ -212,7 +214,7 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer', 'Piano upper']
+        no = ['Synthesizer', 'Piano upper', 'Piano lower']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
             for bar in self.bars:
@@ -232,10 +234,34 @@ class Form(object):
             bar_index = bar_config['bar_index']
 
             bar_config['harmonies'] = []
+            bar_config['harmonies_not_covered'] = []
 
             for i, dur in enumerate(bar_config['harmonic_rhythm']):
                 chord = piano_upper[bar_index][i]
 
                 harm = self.harmony.choose(drone)
                 bar_config['harmonies'].append(harm)
+                bar_config['harmonies_not_covered'].append(harm)
                 chord.note_heads.extend(harm)
+
+    def make_bassline(self):
+        previous = -8
+        piano_lower = self.score['Piano'][1]
+        for bar_config in self.bars:
+            harmonies = bar_config['harmonies']
+            harmonic_rhythm = bar_config['harmonic_rhythm']
+
+            pitches = []
+            for i, h in enumerate(harmonies):
+                p = next_piano_bass_note(previous, h)
+                previous = p
+                pitches.append(p)
+
+                # bar_config['harmonies_not_covered'][i].remove(abs(p % 12))
+
+            bar_config['piano_lower_pitches'] = pitches
+
+            bar = get_bar(harmonic_rhythm, pitches)
+
+            piano_lower.append(bar)
+

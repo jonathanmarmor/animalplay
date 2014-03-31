@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from abjad import Chord, Duration, Measure, TimeSignature
-
 from utils import weighted_choice
-# from abjad_utils import get_rest_bar
+from abjad_utils import get_bar
 
 
 # Durations in terms of 16th notes
@@ -35,13 +33,13 @@ def choose(section):
     """
     rv = []
     for bar_config in section:
-
         durations = weighted_choice(options[1], weights[1])
         bar_config['harmonic_rhythm'] = durations
 
-        chords = [Chord([], Duration(dur, 16)) for dur in durations]
+        bar = get_bar(durations)
 
-        bar = Measure(TimeSignature((4, 4)), chords)
+        # chords = [Chord([], Duration(dur, 16)) for dur in durations]
+        # bar = Measure(TimeSignature((4, 4)), chords)
 
         rv.append(bar)
 

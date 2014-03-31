@@ -21,6 +21,19 @@ def get_one_note_bar(pitch):
     return Measure(TimeSignature((4, 4)), [get_note(pitch, (1, 1))])
 
 
+def get_bar(durations, pitches=None):
+    if not pitches:
+        pitches = [[] for _ in durations]
+    chords = []
+    for dur, p in zip(durations, pitches):
+        if isinstance(p, int):
+            p = [p]
+        chord = Chord(p, Duration(dur, 16))
+        chords.append(chord)
+    return Measure(TimeSignature((4, 4)), chords)
+
+
+
 # def get_harmonic_rhythm_bar(harmonic_rhythm, rhythm_string):
 
 

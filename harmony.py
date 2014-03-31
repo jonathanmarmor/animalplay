@@ -235,6 +235,85 @@ def rotate(drone, chord):
     return out
 
 
+def get_intervals(harmony):
+    """
+    >>> get_intervals([2, 6, 9])
+    {
+        3: [(6, 9)],
+        4: [(2, 6)],
+        5: [(9, 2)]
+    }
+
+    """
+    intervals = defaultdict(list)
+    for interval in range(1, 7):
+        for bottom in harmony:
+            top = (bottom + interval) % 12
+            if top in harmony:
+                intervals[interval].append((bottom, top))
+    return dict(intervals)
+
+
+
+def ranked_roots(harmony):
+    """return a list of the notes in the harmony in the order in which they are most likely to be used as the root.
+
+    1. top of a P4
+    2. bottom of a P4
+    3. bottom of a M3
+    5. top of a m3
+
+    bottom of a m2 should be demoted.
+
+    >>> ranked_roots([0, 4, 7])
+    [0, 7, 4]
+
+    >>> ranked_roots([0, 2, 4, 7, 11])
+    [0, 4, 7, ]
+
+    """
+
+    weights = defaultdict(lambda: defaultdict(int))
+    weights[5][1] = 200  # Top of P4
+    weights[5][0] = 50  # Bottom of P4
+    weights[4][0] = 20  # Bottom of M3
+    weights[3][1] = 10  # Top of m3
+    weights[4][1] = 9  # Top of M3
+    weights[3][0] = 8  # Bottom of m3
+
+    weights[6][0] = -1  # Bottom of tritone
+    weights[6][1] = -1  # Top of tritone
+
+    weights[1][0] = -100  # Bottom of m1
+
+    weighted_notes = defaultdict(int)
+
+    intervals = get_intervals(harmony)
+    for size in intervals:
+        for interval in intervals[size]:
+            for i, p in enumerate(interval):
+                weight = weights[size][i]
+                weighted_notes[p] += weight
+    items = weighted_notes.items()
+    items = sorted(items, key=lambda x: x[1], reverse=True)
+
+    # Shuffle rank of pitches with the same weights
+    weight_groups = itertools.groupby(items, key=lambda x: x[1])
+    ranked = []
+    for weight, group in weight_groups:
+        group = list(group)
+        random.shuffle(group)
+        ranked.extend(group)
+
+    return [item[0] for item in ranked]
+
+
+def choose_root(harmony):
+    ranked = ranked_roots(harmony)
+    weights = range(len(ranked), 0, -1)
+    return weighted_choice(ranked, weights)
+
+
 class Harmony(object):
     def __init__(self, drones):
         self.drones = drones
