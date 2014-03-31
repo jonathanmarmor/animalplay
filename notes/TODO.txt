@@ -18,6 +18,7 @@ x - adjust drone entrances and exits in bar_configs and synth part
 
 - add more harmonic rhythm options
 - use alternate rhythms in soloist, accompaniment, and piano left hand
+(for soloist, maybe just add some extra notes on top of the existing harmonic rhythm)
 
 - clarinet part in Bb
 - diminuendo and crescendo in soloist parts
