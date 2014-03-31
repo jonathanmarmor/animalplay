@@ -195,18 +195,39 @@ class Form(object):
             piano_first_note = piano[bar_index][0]
             add_dynamic(piano_first_note, first_bar_conf['dynamics']['piano'])
 
-        # for section in self.volume_sections:
-        #     first_bar_conf = section[0]
-        #     bar_index = first_bar_conf['bar_index']
 
-        #     soloist = self.score[first_bar_conf['soloist']]
-        #     soloist_first_note = soloist[bar_index][0]
-        #     add_dynamic(soloist_first_note, first_bar_conf['dynamics']['soloist'])
+        dynamic = None
+        previous_soloist = None
+        for bar in self.bars:
+            i = bar['bar_index']
+            soloist_name = bar['soloist']
+            if soloist_name:
+                dyn = bar['dynamics']['soloist']
+                if dyn != dynamic or soloist_name != previous_soloist:
+                    dynamic = dyn
+                    previous_soloist = soloist_name
+                    soloist = self.score[soloist_name]
+                    first_note = soloist[i][0]
+                    add_dynamic(first_note, dynamic)
 
-        #     for acc_name in first_bar_conf['accompanists']:
-        #         acc = self.score[acc_name]
-        #         first_note = acc[bar_index][0]
-        #         add_dynamic(first_note, first_bar_conf['dynamics']['accompanists'])
+
+
+
+
+
+            # first_bar_conf = section[0]
+            # bar_index = first_bar_conf['bar_index']
+
+            # soloist = self.score[first_bar_conf['soloist']]
+            # soloist_first_note = soloist[bar_index][0]
+            # add_dynamic(soloist_first_note, first_bar_conf['dynamics']['soloist'])
+
+            # for acc_name in first_bar_conf['accompanists']:
+            #     acc = self.score[acc_name]
+            #     first_note = acc[bar_index][0]
+            #     add_dynamic(first_note, first_bar_conf['dynamics']['accompanists'])
+
+
 
         synth = self.score['Synthesizer']
         # TODO use the section where the drone is actually sounding, not the square section
