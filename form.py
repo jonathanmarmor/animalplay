@@ -345,7 +345,6 @@ class Form(object):
 
         # End of second drone
         choice = random.choice([0, 1, 2])
-        print choice
         if choice == 0:
             bar = self.drone_sections[2][-1]
             bar['drone'] = None
@@ -357,6 +356,7 @@ class Form(object):
             bar['drone'] = self.drones[1]
             i = bar['bar_index']
             synth[i] = get_bar([16], [bar['drone']])
+            tie(synth[i - 1:i + 1])
 
         # Start of third drone A
 
