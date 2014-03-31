@@ -110,6 +110,8 @@ class Form(object):
 
         self.make_accompaniment()
 
+        self.make_soloist()
+
         self.add_rehearsal_marks()
         self.add_dynamics()
         self.add_double_barlines()
@@ -440,3 +442,21 @@ class Form(object):
 
                 a[bar_config['bar_index']] = get_bar(harmonic_rhythm, a_pitches)
                 b[bar_config['bar_index']] = get_bar(harmonic_rhythm, b_pitches)
+
+    def make_soloist(self):
+        for bar_config in self.bars:
+            name = bar_config['soloist']
+            if name:
+                soloist = self.score[name]
+
+                harmonies = bar_config['harmonies']
+                harmonic_rhythm = bar_config['harmonic_rhythm']
+
+                pitches = []
+                for i, h in enumerate(harmonies):
+                    pitch = random.choice(h)
+                    pitches.append(pitch)
+
+                bar_config['{}_pitches'.format(name)] = pitches
+
+                soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
