@@ -344,6 +344,7 @@ class Form(object):
         synth = self.score['Synthesizer']
 
         # End of second drone
+
         choice = random.choice([0, 1, 2])
         if choice == 0:
             bar = self.drone_sections[2][-1]
@@ -358,15 +359,56 @@ class Form(object):
             synth[i] = get_bar([16], [bar['drone']])
             tie(synth[i - 1:i + 1])
 
+        # Third drone
+
+        # Decide which pitch goes first
+        drone_options = list(self.drones[2])[:]
+        random.shuffle(drone_options)
+        drone_a, drone_b = drone_options
+
         # Start of third drone A
+        choice = random.choice(range(1, 6))
+        bars = self.drone_sections[3][-choice:]
+        to_tie = []
+        for bar in bars:
+            bar['drone'] = drone_a
+            i = bar['bar_index']
+            to_tie.append(i)
+            synth[i] = get_bar([16], [bar['drone']])
 
         # Start of third drone B
+        choice = random.choice(range(1, 5))
+        bars = self.drone_sections[4][:choice]
+        for bar in bars:
+            bar['drone'] = drone_a
+            i = bar['bar_index']
+            to_tie.append(i)
+            synth[i] = get_bar([16], [bar['drone']])
+
+        tie([synth[i] for i in to_tie])
 
         # End of third drone A
+        choice = random.choice(range(1, 5))
+        bars = self.drone_sections[4][-choice:]
+        for bar in bars:
+            bar['drone'] = drone_b
+            i = bar['bar_index']
+            synth[i][0].note_heads.remove(drone_a)
 
         # End of third drone B
+        choice = random.choice(range(1, 5))
+        bars = self.drone_sections[5][:choice]
+        to_tie = []
+        for bar in bars:
+            bar['drone'] = drone_b
+            i = bar['bar_index']
+            to_tie.append(i)
+            synth[i] = get_bar([16], [bar['drone']])
+        to_tie.insert(0, to_tie[0] - 1)
+        tie([synth[i] for i in to_tie])
 
         # End of fourth drone
+
         bar = self.drone_sections[6][-1]
         bar['drone'] = None
         i = bar['bar_index']
