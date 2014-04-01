@@ -3,8 +3,9 @@ x - save harmonies as a list of lists of pitch classes in the bar_configs
 x - make bass line
 x - adjust soloist/accompaniment settings based on soloist entrances and exists
 x - adjust drone entrances and exits in bar_configs and synth part
+x - figure out correct tempo
 
-- figure out correct tempo
+- add more harmonic rhythm options
 
 - make accompaniment lines
 
@@ -16,9 +17,12 @@ x - adjust drone entrances and exits in bar_configs and synth part
 - double stops in accompaniment parts
 - out of tune notes in accompaniment parts
 
-- add more harmonic rhythm options
+
 - use alternate rhythms in soloist, accompaniment, and piano left hand
-(for soloist, maybe just add some extra notes on top of the existing harmonic rhythm)
+    - for soloist, add some extra notes on top of the existing harmonic rhythm
+    - go through and tie together some consecutive notes with the same pitch. maybe do 80% or something.
+    - is there ever a time when we'd want a completely different rhythm in the melody or accompaniment?
+    - do we want to borrow some rhythms for the melody from one of the melody transcriptions I've been thinking about using for years? or from cpe bach israelites page 100?
 
 - clarinet part in Bb
 - diminuendo and crescendo in soloist parts
@@ -27,4 +31,5 @@ x - adjust drone entrances and exits in bar_configs and synth part
 
 - last two bars should have some sort of rhythmic ending (half half whole for example)
 
-- force all sharps or all flats?
+- force all sharps or all flats? (send score to Katie and Devin to critique the notation)
+

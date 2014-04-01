@@ -36,6 +36,58 @@ def get_bar(durations, pitches=None):
     return Measure(TimeSignature((4, 4)), chords)
 
 
+def parse_rhythm(rhythm, pitches=None):
+    """
+    >>> x = parse_rhythm([(16, 4), 12])
+    >>> x
+    [Measure((4, 4), "<f'>1"), Measure((4, 4), "<f'>4 <f'>2.")]
+    >>> from abjad import Staff, format
+    >>> s = Staff(x)
+    >>> [l.note_heads.append(4) for l in s.select_leaves()]
+    [None, None, None]
+    >>> print(format(s))
+    \\new Staff {
+        {
+            \\time 4/4
+            <e'>1 ~
+        }
+        {
+            <e'>4
+            <e'>2.
+        }
+    }
+
+    """
+    denominator = 16
+    if not pitches:
+        pitches = [[] for _ in rhythm]
+    measures = []
+    total = 0
+    to_tie = []
+    for note, p in zip(rhythm, pitches):
+        if total % denominator == 0:
+            m = Measure(TimeSignature((4, 4)), [])
+            measures.append(m)
+        if isinstance(note, tuple):
+            tie = []
+            to_tie.append(tie)
+            for n in note:
+                chord = Chord([], Duration(n, denominator))
+                m.append(chord)
+                tie.append(chord)
+                total += n
+                if total % denominator == 0:
+                    m = Measure(TimeSignature((4, 4)), [])
+                    measures.append(m)
+        else:
+            total += note
+            chord = Chord([], Duration(note, denominator))
+            m.append(chord)
+    for tie in to_tie:
+        attach(Tie(), tie)
+    return measures
+
+
 
 # def get_harmonic_rhythm_bar(harmonic_rhythm, rhythm_string):
 
@@ -189,3 +241,7 @@ s = Staff(Measure(
 
 
 # '\times 2/3 { <>8 <>8 <>8 }'
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

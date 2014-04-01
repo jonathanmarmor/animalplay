@@ -4,4 +4,4 @@
 
 class Config(object):
     tempo_duration = (1, 4)
-    tempo_bpm_range = (112, 120)
+    tempo_bpm_range = (74, 80)
