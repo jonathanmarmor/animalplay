@@ -36,8 +36,17 @@ def get_bar(durations, pitches=None):
     return Measure(TimeSignature((4, 4)), chords)
 
 
-def parse_rhythm(rhythm, pitches=None):
-    """
+def _make_note(pitches, duration, denominator):
+    if pitches == 'r':
+        return Rest(Duration(duration, denominator))
+    if isinstance(pitches, int):
+        pitches = [pitches]
+    return Chord(pitches, Duration(duration, denominator))
+
+
+def parse_rhythm(rhythm, pitches=None, denominator=16):
+    """Turn a list of 16th note durations with tied notes in tuples into a list of abjad Measures.
+
     >>> x = parse_rhythm([(16, 4), 12])
     >>> x
     [Measure((4, 4), "<f'>1"), Measure((4, 4), "<f'>4 <f'>2.")]
@@ -58,44 +67,35 @@ def parse_rhythm(rhythm, pitches=None):
     }
 
     """
-    denominator = 16
     if not pitches:
         pitches = [[] for _ in rhythm]
+    if len(rhythm) != len(pitches):
+        raise Exception('Length of rhythm and pitches doesnt match.')
     measures = []
     total = 0
     to_tie = []
-    for note, p in zip(rhythm, pitches):
+    for duration, p in zip(rhythm, pitches):
         if total % denominator == 0:
-            m = Measure(TimeSignature((4, 4)), [])
-            measures.append(m)
-        if isinstance(note, tuple):
+            measure = Measure(TimeSignature((4, 4)), [])
+            measures.append(measure)
+        if isinstance(duration, tuple):
             tie = []
             to_tie.append(tie)
-            for n in note:
-                chord = Chord([], Duration(n, denominator))
-                m.append(chord)
-                tie.append(chord)
-                total += n
+            for d in duration:
+                note = _make_note(p, d, denominator)
+                measure.append(note)
+                tie.append(note)
+                total += d
                 if total % denominator == 0:
-                    m = Measure(TimeSignature((4, 4)), [])
-                    measures.append(m)
+                    measure = Measure(TimeSignature((4, 4)), [])
+                    measures.append(measure)
         else:
-            total += note
-            chord = Chord([], Duration(note, denominator))
-            m.append(chord)
+            total += duration
+            note = _make_note(p, duration, denominator)
+            measure.append(note)
     for tie in to_tie:
         attach(Tie(), tie)
     return measures
-
-
-
-# def get_harmonic_rhythm_bar(harmonic_rhythm, rhythm_string):
-
-
-#     notes = [Chord([], Duration(1, 1))]
-
-#     return Measure(TimeSignature((4, 4)), notes)
-
 
 
 def get_note(notes, duration):

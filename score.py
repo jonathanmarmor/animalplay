@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from abjad import attach
-from abjad.tools.indicatortools import TimeSignature, Tempo
+from abjad.tools.indicatortools import Tempo
 from abjad.tools.instrumenttools import (Violin, ClarinetInBFlat, Cello, Piano,
     Instrument)
 
