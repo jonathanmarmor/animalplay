@@ -5,8 +5,9 @@ x - adjust soloist/accompaniment settings based on soloist entrances and exists
 x - adjust drone entrances and exits in bar_configs and synth part
 x - figure out correct tempo
 
-- add phrase-length harmonic rhythm options
+- change existing harmonic rhythms to use new rhythm notation.
 - go through form.py finding places where ['harmonic_rhythm'] is used, and replace with parsing the new rhythm notation. It's better. I swear.
+- add phrase-length harmonic rhythm options
 
 - make accompaniment lines
 

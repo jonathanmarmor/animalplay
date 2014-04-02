@@ -76,8 +76,9 @@ def parse_rhythm(rhythm, pitches=None, denominator=16):
     to_tie = []
     for duration, p in zip(rhythm, pitches):
         if total % denominator == 0:
-            measure = Measure(TimeSignature((4, 4)), [])
-            measures.append(measure)
+            if not (len(measures) and len(measures[-1]) == 0):
+                measure = Measure(TimeSignature((4, 4)), [])
+                measures.append(measure)
         if isinstance(duration, tuple):
             tie = []
             to_tie.append(tie)
