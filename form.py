@@ -512,7 +512,7 @@ class Form(object):
 
         # The drone comes in at a random point in the third volume section
         entrance_section = self.raw_harmonic_rhythm[14]
-        start = random.choice(range(len(entrance_section)))
+        start = random.choice(range(len(entrance_section) - 1))
 
         rests = ['r' for duration in entrance_section[:start]]
         drones = [self.drones[2][0] for duration in entrance_section[start:]]
@@ -520,13 +520,13 @@ class Form(object):
         pitches = rests + drones
         entrance_bars = parse_rhythm(entrance_section, pitches=pitches)
 
+        rhythm = []
         for pitch in pitches:
-            rhythm = []
             if pitch == 'r':
                 rhythm.append(None)
             else:
                 rhythm.append(self.drones[2][0])
-            self.harmonic_rhythm_drones.append(rhythm)
+        self.harmonic_rhythm_drones.append(rhythm)
 
         # Last volume section is droning
         drone_bars = [get_one_note_bar(self.drones[2][0]) for _ in self.volume_sections[15]]
