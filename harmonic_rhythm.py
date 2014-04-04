@@ -53,34 +53,32 @@ WEIGHTS = {
 }
 
 
-# def choose(section, section_config, harmonic_rhythms):
 def choose(section):
+# def choose(section):
     """
     Given a section which is a list of configs for bars, return a list of Measures containing Chords with correct rhythms but no pitches set.
 
     """
 
-    # n_bars = len(section)
-    # raw_rhythm = weighted_choice(OPTIONS[n_bars], WEIGHTS[n_bars])
-    # section_config['harmonic_rhythm'] = raw_rhythm
-    # harmonic_rhythms.append(raw_rhythm)
-    # rhythm = parse_rhythm(raw_rhythm)
-    # return rhythm
+    n_bars = len(section)
+    raw = weighted_choice(OPTIONS[n_bars], WEIGHTS[n_bars])
+    rhythm = parse_rhythm(raw)
+    return raw, rhythm
 
 
 
 
 
-    rv = []
-    for bar_config in section:
-        durations = weighted_choice(OPTIONS[1], WEIGHTS[1])
-        bar_config['harmonic_rhythm'] = durations
+    # rv = []
+    # for bar_config in section:
+    #     durations = weighted_choice(OPTIONS[1], WEIGHTS[1])
+    #     bar_config['harmonic_rhythm'] = durations
 
-        bar = parse_rhythm(durations)[0]
+    #     bar = parse_rhythm(durations)[0]
 
-        # chords = [Chord([], Duration(dur, 16)) for dur in durations]
-        # bar = Measure(TimeSignature((4, 4)), chords)
+    #     # chords = [Chord([], Duration(dur, 16)) for dur in durations]
+    #     # bar = Measure(TimeSignature((4, 4)), chords)
 
-        rv.append(bar)
+    #     rv.append(bar)
 
-    return rv
+    # return rv

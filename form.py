@@ -107,12 +107,12 @@ class Form(object):
         self.adjust_drone_timings()
         # self.align_drones_with_harmonic_rhythm()
 
-        self.choose_harmonies()
-        self.make_bassline()
+        # self.choose_harmonies()
+        # self.make_bassline()
 
-        self.make_accompaniment()
+        # self.make_accompaniment()
 
-        self.make_soloist()
+        # self.make_soloist()
 
         self.add_rehearsal_marks()
         self.add_dynamics()
@@ -156,6 +156,7 @@ class Form(object):
         self.movement_volume_sections = [self.group_section(m, 'volume') for m in self.movement_sections]
 
         self.harmonic_rhythm = []
+        self.raw_harmonic_rhythm = []
         self.harmonic_rhythm_drones = []
 
     def set_staves(self):
@@ -252,16 +253,18 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer', 'Piano upper', 'Piano lower']
+        no = ['Synthesizer']  # , 'Piano lower', 'Piano upper']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
+
             for bar in self.bars:
                 staff.append(get_rest_bar())
 
     def make_harmonic_rhythm(self):
         piano_upper = self.score['Piano'][0]
         for phrase in self.volume_sections:
-            bars = harmonic_rhythm.choose(phrase)
+            raw, bars = harmonic_rhythm.choose(phrase)
+            self.raw_harmonic_rhythm.append(raw)
             self.harmonic_rhythm.append(bars)
             for bar in bars:
                 piano_upper.append(bar)
