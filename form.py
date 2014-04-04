@@ -14,7 +14,8 @@ from abjad_utils import (
     add_dynamic,
     add_final_barline,
     add_double_barline,
-    get_bar
+    get_bar,
+    is_rest,
 )
 import harmonic_rhythm
 from harmony import Harmony
@@ -100,10 +101,11 @@ class Form(object):
 
         self.temp_fill_with_rests()
 
-        self.make_drones()
         self.make_harmonic_rhythm()
 
+        self.make_drones()
         self.adjust_drone_timings()
+        # self.align_drones_with_harmonic_rhythm()
 
         self.choose_harmonies()
         self.make_bassline()
@@ -152,6 +154,9 @@ class Form(object):
         self.volume_sections = self.group_section(self.bars, 'volume')
 
         self.movement_volume_sections = [self.group_section(m, 'volume') for m in self.movement_sections]
+
+        self.harmonic_rhythm = []
+        self.harmonic_rhythm_drones = []
 
     def set_staves(self):
         self.staves = []
@@ -257,6 +262,7 @@ class Form(object):
         piano_upper = self.score['Piano'][0]
         for phrase in self.volume_sections:
             bars = harmonic_rhythm.choose(phrase)
+            self.harmonic_rhythm.append(bars)
             for bar in bars:
                 piano_upper.append(bar)
 
@@ -460,3 +466,8 @@ class Form(object):
                 bar_config['{}_pitches'.format(name)] = pitches
 
                 soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
+
+    # def make_drones(self):
+    #     synth = self.score['Synthesizer']
+
+    #     groupby(self.bars, key=lambda x: x['drone'])

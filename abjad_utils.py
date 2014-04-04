@@ -9,6 +9,9 @@ from abjad.tools.indicatortools import Dynamic
 from abjad.tools.indicatortools import BarLine
 
 
+def is_rest(note):
+    return isinstance(note, Rest)
+
 def get_rest_bar(numerator=4, denominator=4):
     return Measure(TimeSignature((numerator, denominator)), [Rest(Duration(1, 1))])
 
