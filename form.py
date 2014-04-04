@@ -104,7 +104,7 @@ class Form(object):
         self.make_harmonic_rhythm()
 
         self.make_drones()
-        self.adjust_drone_timings()
+        # self.adjust_drone_timings()
         # self.align_drones_with_harmonic_rhythm()
 
         # self.choose_harmonies()
@@ -167,21 +167,6 @@ class Form(object):
                     self.staves.append(staff)
             else:
                 self.staves.append(inst)
-
-    def make_drones(self):
-        for bars in self.drone_sections:
-            drone = bars[0]['drone']
-            if drone != None:
-                for bar in bars:
-                    bar['Synthesizer'] = get_one_note_bar(drone)
-                bars = [b['Synthesizer'] for b in bars]
-                tie(bars)
-            else:
-                for bar in bars:
-                    bar['Synthesizer'] = get_rest_bar()
-
-        synth = self.score['Synthesizer']
-        synth.extend([bar['Synthesizer'] for bar in self.bars])
 
     def add_rehearsal_marks(self):
         for section in self.volume_sections[4::4]:
@@ -253,7 +238,7 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer']  # , 'Piano lower', 'Piano upper']
+        no = ['Synthesizer', 'Piano upper']  # , 'Piano lower']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
 
@@ -471,6 +456,65 @@ class Form(object):
                 soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
 
     # def make_drones(self):
-    #     synth = self.score['Synthesizer']
+    #     for bars in self.drone_sections:
+    #         drone = bars[0]['drone']
+    #         if drone != None:
+    #             for bar in bars:
+    #                 bar['Synthesizer'] = get_one_note_bar(drone)
+    #             bars = [b['Synthesizer'] for b in bars]
+    #             tie(bars)
+    #         else:
+    #             for bar in bars:
+    #                 bar['Synthesizer'] = get_rest_bar()
 
-    #     groupby(self.bars, key=lambda x: x['drone'])
+    #     synth = self.score['Synthesizer']
+    #     synth.extend([bar['Synthesizer'] for bar in self.bars])
+
+    def make_drones(self):
+        synth = self.score['Synthesizer']
+
+        # Drone 1
+        bars = [get_one_note_bar(self.drones[0]) for bar_config in self.drone_sections[0]]
+        tie(bars)
+        synth.extend(bars)
+
+        # Rest 1
+        bars = [get_rest_bar() for bar_config in self.drone_sections[1]]
+        synth.extend(bars)
+
+        # Drone 2
+        bars = [get_one_note_bar(self.drones[1]) for bar_config in self.drone_sections[2]]
+        tie(bars)
+        synth.extend(bars)
+
+
+        # Rest 2
+        bars = [get_rest_bar() for bar_config in self.drone_sections[3]]
+        synth.extend(bars)
+
+
+        # Drone 3
+        bars = [get_one_note_bar(self.drones[2]) for bar_config in self.drone_sections[4]]
+        tie(bars)
+        synth.extend(bars)
+
+        # Rest 3
+        bars = [get_rest_bar() for bar_config in self.drone_sections[5]]
+        synth.extend(bars)
+
+        # Drone 4
+        bars = [get_one_note_bar(self.drones[3]) for bar_config in self.drone_sections[6]]
+        tie(bars)
+        synth.extend(bars)
+
+        # Rest 4
+        bars = [get_rest_bar() for bar_config in self.drone_sections[7]]
+        synth.extend(bars)
+
+
+        # for bar_configs, raw_rhythm in zip(self.volume_sections, self.raw_harmonic_rhythm):
+        #     drone = bar_configs[0]['drone']
+        #     if drone != None:
+
+
+        # groupby(self.bars, key=lambda x: x['drone'])
