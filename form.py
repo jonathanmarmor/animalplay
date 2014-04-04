@@ -29,8 +29,8 @@ class Conf(object):
     soloist = ('Violin', 'Violin', 'Bb Clarinet', 'Cello')
     accompanists = (('Bb Clarinet', 'Cello'), ('Bb Clarinet', 'Cello'),
         ('Violin', 'Cello'), ('Bb Clarinet', 'Violin'))
-    n_bars_options = ((8, 4), (8, 4, 2), (4, 8, 16, 2), (8, 2, 4))
-    n_bars_weights = ((1, 1), (8, 7, 1), (14, 11, 6, 1), (3, 3, 2))
+    n_bars_options = ((8, 4), (8, 4, 2), (4, 8,  16, 2), (8, 2, 4))
+    n_bars_weights = ((1, 1), (8, 7, 1), (5, 16, 10, 1), (3, 3, 2))
 
     dynamics_a = {
         'drone': 'pp',
@@ -105,8 +105,6 @@ class Form(object):
         self.make_harmonic_rhythm()
 
         self.make_drones()
-        # self.adjust_drone_timings()
-        # self.align_drones_with_harmonic_rhythm()
 
         # self.choose_harmonies()
         # self.make_bassline()
@@ -339,80 +337,6 @@ class Form(object):
             for bar in last_section[len(last_section) / 2:]:
                 bar['soloist'] = next_soloist
 
-    def adjust_drone_timings(self):
-        synth = self.score['Synthesizer']
-
-        # End of second drone
-
-        choice = random.choice([0, 1, 2])
-        if choice == 0:
-            bar = self.drone_sections[2][-1]
-            bar['drone'] = None
-            i = bar['bar_index']
-            synth[i] = get_rest_bar()
-        # Do nothing if choice == 1
-        elif choice == 2:
-            bar = self.drone_sections[3][0]
-            bar['drone'] = self.drones[1]
-            i = bar['bar_index']
-            synth[i] = get_bar([16], [bar['drone']])
-            tie(synth[i - 1:i + 1])
-
-        # Third drone
-
-        # Decide which pitch goes first
-        drone_options = list(self.drones[2])[:]
-        random.shuffle(drone_options)
-        drone_a, drone_b = drone_options
-
-        # Start of third drone A
-        choice = random.choice(range(1, 6))
-        bars = self.drone_sections[3][-choice:]
-        to_tie = []
-        for bar in bars:
-            bar['drone'] = drone_a
-            i = bar['bar_index']
-            to_tie.append(i)
-            synth[i] = get_bar([16], [bar['drone']])
-
-        # Start of third drone B
-        choice = random.choice(range(1, 5))
-        bars = self.drone_sections[4][:choice]
-        for bar in bars:
-            bar['drone'] = drone_a
-            i = bar['bar_index']
-            to_tie.append(i)
-            synth[i] = get_bar([16], [bar['drone']])
-
-        tie([synth[i] for i in to_tie])
-
-        # End of third drone A
-        choice = random.choice(range(1, 5))
-        bars = self.drone_sections[4][-choice:]
-        for bar in bars:
-            bar['drone'] = drone_b
-            i = bar['bar_index']
-            synth[i][0].note_heads.remove(drone_a)
-
-        # End of third drone B
-        choice = random.choice(range(1, 5))
-        bars = self.drone_sections[5][:choice]
-        to_tie = []
-        for bar in bars:
-            bar['drone'] = drone_b
-            i = bar['bar_index']
-            to_tie.append(i)
-            synth[i] = get_bar([16], [bar['drone']])
-        to_tie.insert(0, to_tie[0] - 1)
-        tie([synth[i] for i in to_tie])
-
-        # End of fourth drone
-
-        bar = self.drone_sections[6][-1]
-        bar['drone'] = None
-        i = bar['bar_index']
-        synth[i] = get_rest_bar()
-
     def make_accompaniment(self):
         for bar_config in self.bars:
             accompanists = bar_config['accompanists']
@@ -456,21 +380,6 @@ class Form(object):
 
                 soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
 
-    # def make_drones(self):
-    #     for bars in self.drone_sections:
-    #         drone = bars[0]['drone']
-    #         if drone != None:
-    #             for bar in bars:
-    #                 bar['Synthesizer'] = get_one_note_bar(drone)
-    #             bars = [b['Synthesizer'] for b in bars]
-    #             tie(bars)
-    #         else:
-    #             for bar in bars:
-    #                 bar['Synthesizer'] = get_rest_bar()
-
-    #     synth = self.score['Synthesizer']
-    #     synth.extend([bar['Synthesizer'] for bar in self.bars])
-
     def make_drones(self):
         synth = self.score['Synthesizer']
 
@@ -499,7 +408,9 @@ class Form(object):
             self.harmonic_rhythm_drones.append([self.drones[1] for r in rhythm])
 
 
-        # Rest 2
+        #######################################
+        #### Rest 2 and Drone 3 A entrance ####
+        #######################################
 
         # First two volume sections are resting
         rest_bars = []
@@ -509,13 +420,15 @@ class Form(object):
         for rhythm in self.raw_harmonic_rhythm[12:14]:
             self.harmonic_rhythm_drones.append([None for r in rhythm])
 
-
         # The drone comes in at a random point in the third volume section
+
+        drone_3a = self.drones[2][0]
+
         entrance_section = self.raw_harmonic_rhythm[14]
         start = random.choice(range(len(entrance_section) - 1))
 
         rests = ['r' for duration in entrance_section[:start]]
-        drones = [self.drones[2][0] for duration in entrance_section[start:]]
+        drones = [drone_3a for duration in entrance_section[start:]]
 
         pitches = rests + drones
         entrance_bars = parse_rhythm(entrance_section, pitches=pitches)
@@ -525,41 +438,115 @@ class Form(object):
             if pitch == 'r':
                 rhythm.append(None)
             else:
-                rhythm.append(self.drones[2][0])
+                rhythm.append(drone_3a)
         self.harmonic_rhythm_drones.append(rhythm)
 
         # Last volume section is droning
-        drone_bars = [get_one_note_bar(self.drones[2][0]) for _ in self.volume_sections[15]]
+        drone_bars = [get_one_note_bar(drone_3a) for _ in self.volume_sections[15]]
 
-        self.harmonic_rhythm_drones.append([self.drones[2][0] for dur in self.raw_harmonic_rhythm[15]])
+        self.harmonic_rhythm_drones.append([drone_3a for dur in self.raw_harmonic_rhythm[15]])
 
         synth.extend(rest_bars + entrance_bars + drone_bars)
+
+        to_tie = entrance_bars + drone_bars
 
         # TODO ties
 
 
-        # Drone 3
-        bars = [get_one_note_bar(self.drones[2]) for _ in self.drone_sections[4]]
-        tie(bars)
+        #######################
+        #### Drone 3 A & B ####
+        #######################
+
+        # First volume section is drone 3 A
+        bars_1 = [get_one_note_bar(drone_3a) for _ in self.volume_sections[16]]
+        self.harmonic_rhythm_drones.append([drone_3a for dur in self.raw_harmonic_rhythm[16]])
+
+
+        # Second volume section drone 3 B comes in
+        entrance_section = self.raw_harmonic_rhythm[17]
+        start = random.choice(range(1, len(entrance_section)))
+
+        a = [drone_3a for duration in entrance_section[:start]]
+        both = [self.drones[2] for duration in entrance_section[start:]]
+
+        pitches = a + both
+        bars_2 = parse_rhythm(entrance_section, pitches=pitches)
+
+        self.harmonic_rhythm_drones.append(pitches)
+
+
+        # Third and Fourth volume sections both drones
+        bars_3_4 = []
+        for section in self.volume_sections[18:20]:
+            bars_3_4.extend([get_one_note_bar(self.drones[2]) for _ in section])
+
+        for rhythm in self.raw_harmonic_rhythm[18:20]:
+            self.harmonic_rhythm_drones.append([self.drones[2] for dur in rhythm])
+
+
+        # Fifth volume section drone 3 A exits
+        drone_3b = self.drones[2][1]
+
+        exit_section = self.raw_harmonic_rhythm[20]
+        start = random.choice(range(1, len(exit_section)))
+
+        both = [self.drones[2] for duration in exit_section[:start]]
+        b = [drone_3b for duration in exit_section[start:]]
+
+        pitches = both + b
+        bars_5 = parse_rhythm(exit_section, pitches=pitches)
+
+        self.harmonic_rhythm_drones.append(pitches)
+
+
+        # Sixth volume section is drone 3 B
+        bars_6 = [get_one_note_bar(drone_3b) for _ in self.volume_sections[21]]
+        self.harmonic_rhythm_drones.append([drone_3b for dur in self.raw_harmonic_rhythm[21]])
+
+
+        # Seventh volume section drone 3 B exits
+        exit_section = self.raw_harmonic_rhythm[22]
+        start = random.choice(range(1, len(exit_section)))
+
+        b = [drone_3b for duration in exit_section[:start]]
+        rest = ['r' for duration in exit_section[start:]]
+
+        pitches = b + rest
+        bars_7 = parse_rhythm(exit_section, pitches=pitches)
+
+
+        rhythm_drones = []
+        for p in pitches:
+            if p == 'r':
+                rhythm_drones.append(None)
+            else:
+                rhythm_drones.append(p)
+        self.harmonic_rhythm_drones.append(rhythm_drones)
+
+
+        # Eighth volume section is resting
+        bars_8 = [get_rest_bar() for _ in self.volume_sections[23]]
+        self.harmonic_rhythm_drones.append([None for dur in self.raw_harmonic_rhythm[23]])
+
+
+        bars = bars_1 + bars_2 + bars_3_4 + bars_5 + bars_6 + bars_7 + bars_8
         synth.extend(bars)
 
-        # Rest 3
-        bars = [get_rest_bar() for _ in self.drone_sections[5]]
-        synth.extend(bars)
+        to_tie += bars
+        tie(to_tie)
+
 
         # Drone 4
         bars = [get_one_note_bar(self.drones[3]) for _ in self.drone_sections[6]]
         tie(bars)
         synth.extend(bars)
 
+        for rhythm in self.raw_harmonic_rhythm[24:28]:
+            self.harmonic_rhythm_drones.append([self.drones[3] for r in rhythm])
+
         # Rest 4
         bars = [get_rest_bar() for _ in self.drone_sections[7]]
         synth.extend(bars)
 
-
-        # for bar_configs, raw_rhythm in zip(self.volume_sections, self.raw_harmonic_rhythm):
-        #     drone = bar_configs[0]['drone']
-        #     if drone != None:
-
-
-        # groupby(self.bars, key=lambda x: x['drone'])
+        for rhythm in self.raw_harmonic_rhythm[28:]:
+            self.harmonic_rhythm_drones.append([None for r in rhythm])
