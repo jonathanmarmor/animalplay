@@ -88,3 +88,34 @@ def deciles(numbers):
     items = sorted(c.items(), key=lambda x: x[0])
     buckets, counts = zip(*items)
     return buckets, counts
+
+
+def remove_ties(raw_rhythm):
+    """
+    >>> remove_ties([12, (4, 8), 8])
+    [12, 4, 8, 8]
+    """
+    rv = []
+    for duration in raw_rhythm:
+        if isinstance(duration, tuple):
+            rv.extend(duration)
+        else:
+            rv.append(duration)
+    return rv
+
+
+def group_into_bars(raw_rhythm, denominator=16):
+    """
+    >>> group_into_bars([12, (4, 8), 8])
+    [[12, 4], [8, 8]]
+    """
+    rv = []
+    untied = remove_ties(raw_rhythm)
+    total = 0
+    for d in untied:
+        if total % denominator == 0:
+            bar = []
+            rv.append(bar)
+        bar.append(d)
+        total += d
+    return rv

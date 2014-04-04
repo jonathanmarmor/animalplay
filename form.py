@@ -5,7 +5,7 @@ from itertools import groupby
 
 from abjad import Rest
 
-from utils import weighted_choice, try_f, AnimalPlayException
+from utils import weighted_choice, try_f, AnimalPlayException, group_into_bars
 from abjad_utils import (
     get_rest_bar,
     get_one_note_bar,
@@ -16,6 +16,7 @@ from abjad_utils import (
     add_double_barline,
     get_bar,
     is_rest,
+    parse_rhythm,
 )
 import harmonic_rhythm
 from harmony import Harmony
@@ -238,7 +239,7 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer', 'Piano upper']  # , 'Piano lower']
+        no = ['Synthesizer']  #, 'Piano upper', 'Piano lower']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
 
@@ -474,41 +475,85 @@ class Form(object):
         synth = self.score['Synthesizer']
 
         # Drone 1
-        bars = [get_one_note_bar(self.drones[0]) for bar_config in self.drone_sections[0]]
+        bars = [get_one_note_bar(self.drones[0]) for _ in self.drone_sections[0]]
         tie(bars)
         synth.extend(bars)
+
+        for rhythm in self.raw_harmonic_rhythm[:4]:
+            self.harmonic_rhythm_drones.append([self.drones[0] for r in rhythm])
 
         # Rest 1
-        bars = [get_rest_bar() for bar_config in self.drone_sections[1]]
-        synth.extend(bars)
+        rest_bars = [get_rest_bar() for _ in self.drone_sections[1]]
+        synth.extend(rest_bars)
+
+        for rhythm in self.raw_harmonic_rhythm[4:8]:
+            self.harmonic_rhythm_drones.append([None for r in rhythm])
+
 
         # Drone 2
-        bars = [get_one_note_bar(self.drones[1]) for bar_config in self.drone_sections[2]]
+        bars = [get_one_note_bar(self.drones[1]) for _ in self.drone_sections[2]]
         tie(bars)
         synth.extend(bars)
+
+        for rhythm in self.raw_harmonic_rhythm[8:12]:
+            self.harmonic_rhythm_drones.append([self.drones[1] for r in rhythm])
 
 
         # Rest 2
-        bars = [get_rest_bar() for bar_config in self.drone_sections[3]]
-        synth.extend(bars)
+
+        # First two volume sections are resting
+        rest_bars = []
+        for section in self.volume_sections[12:14]:
+            rest_bars.extend([get_rest_bar() for _ in section])
+
+        for rhythm in self.raw_harmonic_rhythm[12:14]:
+            self.harmonic_rhythm_drones.append([None for r in rhythm])
+
+
+        # The drone comes in at a random point in the third volume section
+        entrance_section = self.raw_harmonic_rhythm[14]
+        start = random.choice(range(len(entrance_section)))
+
+        rests = ['r' for duration in entrance_section[:start]]
+        drones = [self.drones[2][0] for duration in entrance_section[start:]]
+
+        pitches = rests + drones
+        entrance_bars = parse_rhythm(entrance_section, pitches=pitches)
+
+        for pitch in pitches:
+            rhythm = []
+            if pitch == 'r':
+                rhythm.append(None)
+            else:
+                rhythm.append(self.drones[2][0])
+            self.harmonic_rhythm_drones.append(rhythm)
+
+        # Last volume section is droning
+        drone_bars = [get_one_note_bar(self.drones[2][0]) for _ in self.volume_sections[15]]
+
+        self.harmonic_rhythm_drones.append([self.drones[2][0] for dur in self.raw_harmonic_rhythm[15]])
+
+        synth.extend(rest_bars + entrance_bars + drone_bars)
+
+        # TODO ties
 
 
         # Drone 3
-        bars = [get_one_note_bar(self.drones[2]) for bar_config in self.drone_sections[4]]
+        bars = [get_one_note_bar(self.drones[2]) for _ in self.drone_sections[4]]
         tie(bars)
         synth.extend(bars)
 
         # Rest 3
-        bars = [get_rest_bar() for bar_config in self.drone_sections[5]]
+        bars = [get_rest_bar() for _ in self.drone_sections[5]]
         synth.extend(bars)
 
         # Drone 4
-        bars = [get_one_note_bar(self.drones[3]) for bar_config in self.drone_sections[6]]
+        bars = [get_one_note_bar(self.drones[3]) for _ in self.drone_sections[6]]
         tie(bars)
         synth.extend(bars)
 
         # Rest 4
-        bars = [get_rest_bar() for bar_config in self.drone_sections[7]]
+        bars = [get_rest_bar() for _ in self.drone_sections[7]]
         synth.extend(bars)
 
 
