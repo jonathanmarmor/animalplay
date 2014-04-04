@@ -106,7 +106,7 @@ class Form(object):
 
         self.make_drones()
 
-        # self.choose_harmonies()
+        self.choose_harmonies()
         # self.make_bassline()
 
         # self.make_accompaniment()
@@ -237,7 +237,7 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer']  #, 'Piano upper', 'Piano lower']
+        no = ['Synthesizer', 'Piano upper']  # , 'Piano lower']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
 
@@ -255,20 +255,11 @@ class Form(object):
 
     def choose_harmonies(self):
         piano_upper = self.score['Piano'][0]
-        for bar_config in self.bars:
-            drone = bar_config['drone']
-            bar_index = bar_config['bar_index']
-
-            bar_config['harmonies'] = []
-            bar_config['harmonies_not_covered'] = []
-
-            for i, dur in enumerate(bar_config['harmonic_rhythm']):
-                chord = piano_upper[bar_index][i]
-
-                harm = self.harmony.choose(drone)
-                bar_config['harmonies'].append(harm)
-                bar_config['harmonies_not_covered'].append(harm)
-                chord.note_heads.extend(harm)
+        for drone, rhythm in zip(self.harmonic_rhythm_drones, self.raw_harmonic_rhythm):
+            print rhythm, drone
+            pitches = [self.harmony.choose(d) for d in drone]
+            bars = parse_rhythm(rhythm, pitches=pitches)
+            piano_upper.extend(bars)
 
     def make_bassline(self):
         previous = -8
