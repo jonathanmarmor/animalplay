@@ -409,10 +409,7 @@ class Form(object):
 
         for i, section_configs in enumerate(self.volume_sections):
             print '\tVolume Section #{}'.format(i)
-            harmonies = self.harmonies[i]
-            unused = self.unused_harmonies[i]
-            rhythm = self.raw_harmonic_rhythm[i]
-            len_rhythm = len(rhythm)
+
             soloist_name = soloists[i]
             if soloist_name != previous_soloist_name:
                 previous = None
@@ -425,6 +422,13 @@ class Form(object):
 
             if soloist_name:
                 soloist = self.score[soloist_name]
+                harmonies = self.harmonies[i]
+                unused = self.unused_harmonies[i]
+                rhythm = self.raw_harmonic_rhythm[i]
+
+                rhythm, harmonies, unused = harmonic_rhythm.add_notes(rhythm, harmonies, unused)
+
+                len_rhythm = len(rhythm)
 
                 rests = []
                 if action == 'enter':

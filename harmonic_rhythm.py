@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import random
+
 from utils import weighted_choice
 from abjad_utils import parse_rhythm
 
@@ -54,31 +56,30 @@ WEIGHTS = {
 
 
 def choose(section):
-# def choose(section):
     """
     Given a section which is a list of configs for bars, return a list of Measures containing Chords with correct rhythms but no pitches set.
 
     """
-
     n_bars = len(section)
     raw = weighted_choice(OPTIONS[n_bars], WEIGHTS[n_bars])
     rhythm = parse_rhythm(raw)
     return raw, rhythm
 
 
+def add_notes(rhythm, harmonies, unused):
+    """Take a raw harmonic rhythm and add more notes by getting rid of ties and potentially subdividing exisisting notes."""
+    new_rhythm = []
+    new_harmonies = []
+    new_unused = []
+    for duration, harmony, unused_harmony in zip(rhythm, harmonies, unused):
+        if isinstance(duration, tuple) and random.random() > 0.3:
+            for dur in duration:
+                new_rhythm.append(dur)
+                new_harmonies.append(harmony)
+                new_unused.append(unused_harmony)
+        else:
+            new_rhythm.append(duration)
+            new_harmonies.append(harmony)
+            new_unused.append(unused_harmony)
 
-
-
-    # rv = []
-    # for bar_config in section:
-    #     durations = weighted_choice(OPTIONS[1], WEIGHTS[1])
-    #     bar_config['harmonic_rhythm'] = durations
-
-    #     bar = parse_rhythm(durations)[0]
-
-    #     # chords = [Chord([], Duration(dur, 16)) for dur in durations]
-    #     # bar = Measure(TimeSignature((4, 4)), chords)
-
-    #     rv.append(bar)
-
-    # return rv
+    return new_rhythm, new_harmonies, new_unused

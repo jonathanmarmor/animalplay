@@ -15,10 +15,12 @@ x - make real accompaniment parts
 
 - make soloist part for real
     x - pick pitches
+
     - extra rhythmic notes
     - extra ties
     - choose density of out of tune notes by volume section
     - out of tune notes
+
     - ornaments
     - make it likely to have scalar motion. try n-grams instead of just previous
     - glissandi?
