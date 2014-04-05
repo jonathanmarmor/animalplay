@@ -249,13 +249,10 @@ class Form(object):
                 staff.append(get_rest_bar())
 
     def make_harmonic_rhythm(self):
-        piano_upper = self.score['Piano'][0]
         for phrase in self.volume_sections:
             raw, bars = harmonic_rhythm.choose(phrase)
             self.raw_harmonic_rhythm.append(raw)
             self.harmonic_rhythm.append(bars)
-            for bar in bars:
-                piano_upper.append(bar)
 
     def choose_harmonies(self):
         piano_upper = self.score['Piano'][0]
