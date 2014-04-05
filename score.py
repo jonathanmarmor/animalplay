@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from abjad import attach
+from abjad import abjad_configuration
+from abjad import Score, StaffGroup, Staff, Clef
 from abjad.tools.indicatortools import Tempo
 from abjad.tools.instrumenttools import (Violin, ClarinetInBFlat, Cello, Piano,
     Instrument)
-
-from abjad import Score, StaffGroup, Staff, Clef
 
 from config import Config
 
@@ -77,6 +77,8 @@ def get_synthesizer_staff():
 
 
 def make_score():
+    abjad_configuration['accidental_spelling'] = 'flats'
+
     violin_staff = get_melody_staff(Violin, 'Violin', 'Vn')
     clarinet_staff = get_melody_staff(ClarinetInBFlat, 'Bb Clarinet', 'Cl')
     cello_staff = get_melody_staff(Cello, 'Cello', 'Vc')

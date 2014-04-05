@@ -6,8 +6,8 @@ x - adjust drone entrances and exits in bar_configs and synth part
 x - figure out correct tempo
 x - change existing harmonic rhythms to use new rhythm notation.
 x - redo bassline
+x - make mock up accompaniment parts
 
-- make mock up accompaniment parts
 - make mock up soloist part
 - add phrase-length harmonic rhythm options
 - make real accompaniment parts

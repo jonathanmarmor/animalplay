@@ -354,24 +354,68 @@ class Form(object):
                     b[i] = bar_b
                     i += 1
 
+    # def make_soloist(self):
+    #     for bar_config in self.bars:
+    #         name = bar_config['soloist']
+    #         if name:
+    #             soloist = self.score[name]
 
-    def make_soloist(self):
-        for bar_config in self.bars:
-            name = bar_config['soloist']
-            if name:
-                soloist = self.score[name]
+    #             harmonies = bar_config['harmonies']
+    #             harmonic_rhythm = bar_config['harmonic_rhythm']
 
-                harmonies = bar_config['harmonies']
-                harmonic_rhythm = bar_config['harmonic_rhythm']
+    #             pitches = []
+    #             for i, h in enumerate(harmonies):
+    #                 pitch = random.choice(h)
+    #                 pitches.append(pitch)
 
-                pitches = []
-                for i, h in enumerate(harmonies):
-                    pitch = random.choice(h)
-                    pitches.append(pitch)
+    #             bar_config['{}_pitches'.format(name)] = pitches
 
-                bar_config['{}_pitches'.format(name)] = pitches
+    #             soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
 
-                soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
+
+
+    # def make_soloist(self):
+
+    #     previous_a = 12
+    #     previous_b = 7
+
+    #     for harmonies, unused, rhythm, section_configs in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm, self.volume_sections):
+    #         i = section_configs[0]['bar_index']
+
+
+    #         soloists = [bar_config['soloist'] for bar_config in section_configs]
+    #         soloists = [s for s in list(set(soloists)) if s]
+    #         if not soloists:
+    #             raise Exception('There are no soloists in this section. I didnt realize that was possible, but I guess it is, so figure out what to do in these situations.')
+    #         if len(soloists) == 1:
+    #             soloist_name = soloists[0]
+    #         else:
+    #             raise Exception('There were more than 2 soloists in this section. What? {} In bar # {}'.format(soloists, i))
+
+
+
+    #         if accompanists:
+    #             a_name, b_name = accompanists
+    #             a = self.score[a_name]
+    #             b = self.score[b_name]
+
+    #             pitches_a = []
+    #             pitches_b = []
+    #             for h, unused_h in zip(harmonies, unused):
+    #                 pitch_a, pitch_b = next_accompaniment_notes(a, b, previous_a, previous_b, h, unused_h)
+    #                 previous_a, previous_b = pitch_a, pitch_b
+    #                 pitches_a.append(pitch_a)
+    #                 pitches_b.append(pitch_b)
+    #             bars_a = parse_rhythm(rhythm, pitches_a)
+    #             bars_b = parse_rhythm(rhythm, pitches_b)
+
+    #             for bar_a, bar_b in zip(bars_a, bars_b):
+    #                 a[i] = bar_a
+    #                 b[i] = bar_b
+    #                 i += 1
+
+
+
 
     def make_drones(self):
         synth = self.score['Synthesizer']
