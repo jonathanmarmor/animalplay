@@ -119,3 +119,9 @@ def group_into_bars(raw_rhythm, denominator=16):
         bar.append(d)
         total += d
     return rv
+
+
+def exp_weights(n, exponent=2, reverse=True):
+    weights = [(x + 1) ** exponent for x in range(n)]
+    weights.reverse()
+    return weights

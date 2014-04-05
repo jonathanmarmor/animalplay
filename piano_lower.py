@@ -5,7 +5,7 @@ import itertools
 from collections import defaultdict
 
 from harmony import ranked_roots
-from utils import weighted_choice
+from utils import weighted_choice, exp_weights
 
 
 def rank_by_distance(previous, options):
@@ -55,7 +55,7 @@ def next_piano_bass_note(previous, harmony):
         random.shuffle(ranks[k])
         ranked.extend(ranks[k])
 
-    weights = range(len(ranked), 0, -1)
+    weights = exp_weights(len(ranked))
     return weighted_choice(ranked, weights)
 
 

@@ -22,7 +22,7 @@ from abjad_utils import (
 )
 import harmonic_rhythm
 from harmony import Harmony
-from piano import next_piano_bass_note
+from piano_lower import next_piano_bass_note
 from accompaniment import next_accompaniment_notes
 import solo
 
@@ -60,7 +60,19 @@ class Conf(object):
             'piano': 'f'
         }
     }
-    dynamics = [dynamics_a, dynamics_a, dynamics_b, dynamics_a]
+    dynamics_c = {
+        'drone': 'pp',
+        'q': {
+            'soloist': 'mp',
+            'piano': 'p'
+        },
+        'l': {
+            'soloist': 'f',
+            'accompanists': 'p',
+            'piano': 'mp'
+        }
+    }
+    dynamics = [dynamics_a, dynamics_a, dynamics_b, dynamics_c]
 
 
 def choose_fifth_drone(options):
