@@ -20,13 +20,6 @@ def rank_by_distance(previous, options):
     return [item[1] for item in new_ranks]
 
 
-
-
-# TODO change these based on instrument and movement number
-LOWEST_PITCH = 0
-HIGHEST_PITCH = 24
-
-
 REGISTERS = {
     0: {
         'Bb Clarinet': {'lowest': -10, 'highest': 10},

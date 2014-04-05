@@ -385,7 +385,7 @@ class Form(object):
         # Is the soloist entering, playing through, exiting, or resting?
         actions = solo.get_actions(soloists)
 
-        previous = 19
+        previous = None
 
         for i, section_configs in enumerate(self.volume_sections):
             harmonies = self.harmonies[i]
@@ -396,6 +396,8 @@ class Form(object):
             action = actions[i]
 
             bar_index = section_configs[0]['bar_index']
+
+            movement_number = section_configs[0]['movement_number']
 
             if soloist_name:
                 soloist = self.score[soloist_name]
@@ -424,9 +426,13 @@ class Form(object):
 
                 pitches = []
                 for h, unused_h in zip(harmonies, unused):
-                    pitch = solo.next_soloist_note(soloist_name, previous, h, unused_h)
+                    pitch = solo.next_soloist_note(soloist_name, previous, h, movement_number)
                     previous = pitch
                     pitches.append(pitch)
+
+                    pc = pitch % 12
+                    if pc in unused_h:
+                        unused_h.remove(pc)
 
                 if action == 'enter':
                     pitches = rests + pitches
@@ -449,8 +455,7 @@ class Form(object):
                         crescendo(notes, decrescendo=True)
 
             else:
-                # TODO this could be configured to change the register of the soloist for each movement
-                previous = 19
+                previous = None
 
     def make_drones(self):
         synth = self.score['Synthesizer']

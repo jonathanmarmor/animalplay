@@ -66,19 +66,56 @@ def rank_by_distance(previous, options):
     return [item[1] for item in new_ranks]
 
 
-# TODO change these based on instrument and movement number
-LOWEST_PITCH = 0
-HIGHEST_PITCH = 24
+REGISTERS = {
+    0: {
+        'Violin': {'lowest': 0, 'highest': 22},
+    },
+    1: {
+        'Violin': {'lowest': 7, 'highest': 28},
+        'Bb Clarinet': {'lowest': -5, 'highest': 25},
+    },
+    2: {
+        'Bb Clarinet': {'lowest': -5, 'highest': 25},
+        'Cello': {'lowest': -24, 'highest': 2},
+    },
+    3: {
+        'Violin': {'lowest': -5, 'highest': 24},
+        'Cello': {'lowest': -24, 'highest': 2},
+    },
+}
 
 
-def next_soloist_note(soloist_name, previous, harmony, unused_harmony):
+# def get_options(previous, harmony, lowest, highest):
+#     return [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
 
-    options = [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= LOWEST_PITCH and p <= HIGHEST_PITCH]
+
+# def build_options(previous, harmony, unused_harmony, lowest, highest):
+#     unused_options = get_options(previous, unused_harmony, lowest, highest)
+#     unused_ranked = rank_by_distance(previous, unused_options)
+
+#     used = list(set(harmony) - set(unused_harmony))
+#     used_options = get_options(previous, used, lowest, highest)
+#     used_ranked = rank_by_distance(previous, used_options)
+#     options = unused_ranked + used_ranked
+
+#     return options
+
+
+
+
+def next_soloist_note(soloist_name, previous, harmony, movement_number):
+    registers = REGISTERS[movement_number]
+    register = registers[soloist_name]
+    lowest = register['lowest']
+    highest = register['highest']
+    if previous == None:
+        previous = random.randint(lowest, highest)
+
+    options = [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
     ranked_by_distance = rank_by_distance(previous, options)
 
     weights = exp_weights(len(ranked_by_distance))
 
-    # weights = range(len(ranked_by_distance), 0, -1)
     return weighted_choice(ranked_by_distance, weights)
 
 
