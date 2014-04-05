@@ -158,6 +158,7 @@ class Form(object):
         self.raw_harmonic_rhythm = []
         self.harmonic_rhythm_drones = []
         self.harmonies = []
+        self.unused_harmonies = []
 
     def set_staves(self):
         self.staves = []
@@ -259,18 +260,22 @@ class Form(object):
         for drone, rhythm in zip(self.harmonic_rhythm_drones, self.raw_harmonic_rhythm):
             pitches = [self.harmony.choose(d) for d in drone]
             self.harmonies.append(pitches)
+            self.unused_harmonies.append([p[:] for p in pitches[:]])
             bars = parse_rhythm(rhythm, pitches=pitches)
             piano_upper.extend(bars)
 
     def make_bassline(self):
         previous = -8
         piano_lower = self.score['Piano'][1]
-        for harmonies, rhythm in zip(self.harmonies, self.raw_harmonic_rhythm):
+        for harmonies, unused, rhythm in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm):
             pitches = []
-            for h in harmonies:
+            for h, unused_h in zip(harmonies, unused):
                 p = next_piano_bass_note(previous, h)
                 previous = p
                 pitches.append(p)
+
+                unused_h.remove(p % 12)
+
             bars = parse_rhythm(rhythm, pitches)
             piano_lower.extend(bars)
 
@@ -322,30 +327,66 @@ class Form(object):
             for bar in last_section[len(last_section) / 2:]:
                 bar['soloist'] = next_soloist
 
-    def make_accompaniment(self):
-        for bar_config in self.bars:
-            accompanists = bar_config['accompanists']
-            if accompanists:
-                a_name, b_name = accompanists
-                a = self.score[a_name]
-                b = self.score[b_name]
+    # def make_accompaniment(self):
+    #     for bar_config in self.bars:
+    #         accompanists = bar_config['accompanists']
+    #         if accompanists:
+    #             a_name, b_name = accompanists
+    #             a = self.score[a_name]
+    #             b = self.score[b_name]
 
-                harmonies = bar_config['harmonies']
-                harmonic_rhythm = bar_config['harmonic_rhythm']
+    #             harmonies = bar_config['harmonies']
+    #             harmonic_rhythm = bar_config['harmonic_rhythm']
 
-                a_pitches = []
-                b_pitches = []
-                for i, h in enumerate(harmonies):
-                    a_pitch = random.choice(h)
-                    a_pitches.append(a_pitch)
-                    b_pitch = random.choice(h)
-                    b_pitches.append(b_pitch)
+    #             a_pitches = []
+    #             b_pitches = []
+    #             for i, h in enumerate(harmonies):
+    #                 a_pitch = random.choice(h)
+    #                 a_pitches.append(a_pitch)
+    #                 b_pitch = random.choice(h)
+    #                 b_pitches.append(b_pitch)
 
-                bar_config['{}_pitches'.format(a_name)] = a_pitches
-                bar_config['{}_pitches'.format(b_name)] = b_pitches
+    #             bar_config['{}_pitches'.format(a_name)] = a_pitches
+    #             bar_config['{}_pitches'.format(b_name)] = b_pitches
 
-                a[bar_config['bar_index']] = get_bar(harmonic_rhythm, a_pitches)
-                b[bar_config['bar_index']] = get_bar(harmonic_rhythm, b_pitches)
+    #             a[bar_config['bar_index']] = get_bar(harmonic_rhythm, a_pitches)
+    #             b[bar_config['bar_index']] = get_bar(harmonic_rhythm, b_pitches)
+
+    # def make_accompaniment(self):
+    #     i = 0
+
+    #     previous_a = 12
+    #     previous_b = 7
+    #     for harmonies, unused, rhythm in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm):
+
+    #         pitches_a = []
+    #         pitches_b = []
+    #         for h, unused_h in zip(harmonies, unused):
+    #             pitch_a, pitch_b = next_accompaniment_notes(previous_a, previous_b, h, unused_h)
+    #             previous_a, previous_b = pitch_a, pitch_b
+    #             pitches_a.append(pitch_a)
+    #             pitches_b.append(pitch_b)
+    #         bars_a = parse_rhythm(rhythm, pitches_a)
+    #         bars_b = parse_rhythm(rhythm, pitches_b)
+
+    #         for bar in bars:
+    #             bar_config = self.bars[i]
+
+    #             accompanists = bar_config['accompanists']
+    #             a, b = [self.score[acc] for acc in accompanists]
+
+
+
+
+
+
+    #             i += 1
+
+
+    #         piano_lower.extend(bars)
+
+
+
 
     def make_soloist(self):
         for bar_config in self.bars:

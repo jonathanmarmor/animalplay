@@ -7,16 +7,15 @@ x - figure out correct tempo
 x - change existing harmonic rhythms to use new rhythm notation.
 x - redo bassline
 
-- make accompaniment parts
+- make mock up accompaniment parts
 - make mock up soloist part
 - add phrase-length harmonic rhythm options
+- make real accompaniment parts
 - choose density of out of tune notes
 - make soloist part for real
 - ornaments in soloist part
-
 - double stops in accompaniment parts
 - out of tune notes in accompaniment parts
-
 
 - use alternate rhythms in soloist, accompaniment, and piano left hand
     - for soloist, add some extra notes on top of the existing harmonic rhythm
