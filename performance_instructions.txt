@@ -1,0 +1,18 @@
+Performance Instructions:
+
+Everyone
+- Accidentals are remembered to the end of the measure in which they occur and only in their own octave.
+
+Violin and Cello
+- Notated dyads of a minor second or major second should be played as a single note. Pick any pitch between the two notated pitches.
+
+Clarinet
+- Your part is in Bb (**TODO make this true), the clarinet part in the score is in concert pitch.
+
+Soloists
+- Soloists should be louder than everyone else.
+- The soloist part should, as much as possible, continuously sound.
+- The Violin is the soloist for about the first half of the piece
+- Just before rehearsal mark D the Clarinet becomes the soloist
+- Just before rehearsal mark F the Cello becomes the soloist
+- Just before the end of the piece the Violin becomes the soloist again

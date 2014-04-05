@@ -23,6 +23,7 @@ import harmonic_rhythm
 from harmony import Harmony
 from piano import next_piano_bass_note
 from accompaniment import next_accompaniment_notes
+import solo
 
 
 class Conf(object):
@@ -113,7 +114,7 @@ class Form(object):
 
         self.make_accompaniment()
 
-        # self.make_soloist()
+        self.make_soloist()
 
         self.add_rehearsal_marks()
         self.add_dynamics()
@@ -342,7 +343,7 @@ class Form(object):
                 pitches_a = []
                 pitches_b = []
                 for h, unused_h in zip(harmonies, unused):
-                    pitch_a, pitch_b = next_accompaniment_notes(a, b, previous_a, previous_b, h, unused_h)
+                    pitch_a, pitch_b = next_accompaniment_notes(a_name, b_name, previous_a, previous_b, h, unused_h)
                     previous_a, previous_b = pitch_a, pitch_b
                     pitches_a.append(pitch_a)
                     pitches_b.append(pitch_b)
@@ -354,65 +355,45 @@ class Form(object):
                     b[i] = bar_b
                     i += 1
 
-    # def make_soloist(self):
-    #     for bar_config in self.bars:
-    #         name = bar_config['soloist']
-    #         if name:
-    #             soloist = self.score[name]
 
-    #             harmonies = bar_config['harmonies']
-    #             harmonic_rhythm = bar_config['harmonic_rhythm']
+    def make_soloist(self):
+        soloists = [sec[0]['soloist'] for sec in self.volume_sections]
+        # Is the soloist entering, playing through, exiting, or resting?
+        actions = solo.get_actions(soloists)
 
-    #             pitches = []
-    #             for i, h in enumerate(harmonies):
-    #                 pitch = random.choice(h)
-    #                 pitches.append(pitch)
+        previous = 19
 
-    #             bar_config['{}_pitches'.format(name)] = pitches
+        for i, section_configs in enumerate(self.volume_sections):
+            harmonies = self.harmonies[i]
+            unused = self.unused_harmonies[i]
+            rhythm = self.raw_harmonic_rhythm[i]
+            soloist_name = soloists[i]
+            action = actions[i]
 
-    #             soloist[bar_config['bar_index']] = get_bar(harmonic_rhythm, pitches)
+            bar_index = section_configs[0]['bar_index']
 
+            if soloist_name:
+                soloist = self.score[soloist_name]
 
+                # TODO if action is entering or exiting:
+                # - choose when to enter/exit
+                # - fill the remainder with rests
+                # - add a crescendo/decrescendo
+                # if action ==
 
-    # def make_soloist(self):
+                pitches = []
+                for h, unused_h in zip(harmonies, unused):
+                    pitch = solo.next_soloist_note(soloist_name, previous, h, unused_h)
+                    previous = pitch
+                    pitches.append(pitch)
+                bars = parse_rhythm(rhythm, pitches)
 
-    #     previous_a = 12
-    #     previous_b = 7
-
-    #     for harmonies, unused, rhythm, section_configs in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm, self.volume_sections):
-    #         i = section_configs[0]['bar_index']
-
-
-    #         soloists = [bar_config['soloist'] for bar_config in section_configs]
-    #         soloists = [s for s in list(set(soloists)) if s]
-    #         if not soloists:
-    #             raise Exception('There are no soloists in this section. I didnt realize that was possible, but I guess it is, so figure out what to do in these situations.')
-    #         if len(soloists) == 1:
-    #             soloist_name = soloists[0]
-    #         else:
-    #             raise Exception('There were more than 2 soloists in this section. What? {} In bar # {}'.format(soloists, i))
-
-
-
-    #         if accompanists:
-    #             a_name, b_name = accompanists
-    #             a = self.score[a_name]
-    #             b = self.score[b_name]
-
-    #             pitches_a = []
-    #             pitches_b = []
-    #             for h, unused_h in zip(harmonies, unused):
-    #                 pitch_a, pitch_b = next_accompaniment_notes(a, b, previous_a, previous_b, h, unused_h)
-    #                 previous_a, previous_b = pitch_a, pitch_b
-    #                 pitches_a.append(pitch_a)
-    #                 pitches_b.append(pitch_b)
-    #             bars_a = parse_rhythm(rhythm, pitches_a)
-    #             bars_b = parse_rhythm(rhythm, pitches_b)
-
-    #             for bar_a, bar_b in zip(bars_a, bars_b):
-    #                 a[i] = bar_a
-    #                 b[i] = bar_b
-    #                 i += 1
+                for bar in bars:
+                    soloist[bar_index] = bar
+                    bar_index += 1
+            else:
+                # TODO this could be configured to change the register of the soloist for each movement
+                previous = 19
 
 
 
