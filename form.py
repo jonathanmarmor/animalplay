@@ -107,7 +107,7 @@ class Form(object):
         self.make_drones()
 
         self.choose_harmonies()
-        # self.make_bassline()
+        self.make_bassline()
 
         # self.make_accompaniment()
 
@@ -157,6 +157,7 @@ class Form(object):
         self.harmonic_rhythm = []
         self.raw_harmonic_rhythm = []
         self.harmonic_rhythm_drones = []
+        self.harmonies = []
 
     def set_staves(self):
         self.staves = []
@@ -237,7 +238,7 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer', 'Piano upper']  # , 'Piano lower']
+        no = ['Synthesizer', 'Piano upper', 'Piano lower']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
 
@@ -256,29 +257,22 @@ class Form(object):
     def choose_harmonies(self):
         piano_upper = self.score['Piano'][0]
         for drone, rhythm in zip(self.harmonic_rhythm_drones, self.raw_harmonic_rhythm):
-            print rhythm, drone
             pitches = [self.harmony.choose(d) for d in drone]
+            self.harmonies.append(pitches)
             bars = parse_rhythm(rhythm, pitches=pitches)
             piano_upper.extend(bars)
 
     def make_bassline(self):
         previous = -8
         piano_lower = self.score['Piano'][1]
-        for bar_config in self.bars:
-            harmonies = bar_config['harmonies']
-            harmonic_rhythm = bar_config['harmonic_rhythm']
-
+        for harmonies, rhythm in zip(self.harmonies, self.raw_harmonic_rhythm):
             pitches = []
-            for i, h in enumerate(harmonies):
+            for h in harmonies:
                 p = next_piano_bass_note(previous, h)
                 previous = p
                 pitches.append(p)
-
-                # bar_config['harmonies_not_covered'][i].remove(abs(p % 12))
-
-            bar_config['piano_lower_pitches'] = pitches
-            bar = get_bar(harmonic_rhythm, pitches)
-            piano_lower.append(bar)
+            bars = parse_rhythm(rhythm, pitches)
+            piano_lower.extend(bars)
 
     def adjust_soloist_entrances(self):
         movements = self.movement_sections
