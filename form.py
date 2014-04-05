@@ -2,11 +2,10 @@
 
 import random
 from itertools import groupby
-from collections import defaultdict
 
 from abjad import Rest
 
-from utils import weighted_choice, try_f, AnimalPlayException, group_into_bars
+from utils import weighted_choice, try_f, AnimalPlayException
 from abjad_utils import (
     get_rest_bar,
     get_one_note_bar,
@@ -15,10 +14,10 @@ from abjad_utils import (
     add_dynamic,
     add_final_barline,
     add_double_barline,
-    get_bar,
     is_rest,
     parse_rhythm,
     crescendo,
+    clef,
 )
 import harmonic_rhythm
 from harmony import Harmony
@@ -442,6 +441,9 @@ class Form(object):
 
                 bars = parse_rhythm(rhythm, pitches)
                 soloist[bar_index:bar_index + len(bars)] = bars
+
+                if soloist_name == 'Cello':
+                    clef(soloist[bar_index], 'bass')
 
                 if action == 'enter' or action == 'exit':
                     notes = []

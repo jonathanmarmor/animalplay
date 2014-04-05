@@ -1,5 +1,5 @@
 from abjad import attach
-from abjad import (Measure, TimeSignature, Rest, Chord, Duration, Container)
+from abjad import (Measure, TimeSignature, Rest, Chord, Duration, Container, Clef)
 from abjad.tools.spannertools import Tie, Beam, Crescendo, Decrescendo
 
 # from abjad.tools.markuptools import Markup
@@ -161,6 +161,14 @@ def lookup_duration(quarterlengths):
         0.25: '16',
     }
     return d[quarterlengths]
+
+
+def clef(item, type):
+    if type not in ['treble', 'bass', 'alto']:
+        raise Exception('clef type is not one of treble, bass, alto')
+    attach(Clef(type), item)
+
+
 
 
 # def triplet(notes):
