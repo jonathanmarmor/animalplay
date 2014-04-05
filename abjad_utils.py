@@ -1,6 +1,6 @@
 from abjad import attach
 from abjad import (Measure, TimeSignature, Rest, Chord, Duration, Container)
-from abjad.tools.spannertools import Tie, Beam
+from abjad.tools.spannertools import Tie, Beam, Crescendo, Decrescendo
 
 # from abjad.tools.markuptools import Markup
 # from abjad.tools.spannertools import TextScriptSpanner
@@ -114,6 +114,13 @@ def tie(notes):
 
 def beam(notes):
     attach(Beam(), notes)
+
+
+def crescendo(notes, decrescendo=False):
+    f = Crescendo
+    if decrescendo:
+        f = Decrescendo
+    attach(f(include_rests=True), notes)
 
 
 def container(items, is_simultaneous=False):

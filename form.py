@@ -18,6 +18,7 @@ from abjad_utils import (
     get_bar,
     is_rest,
     parse_rhythm,
+    crescendo,
 )
 import harmonic_rhythm
 from harmony import Harmony
@@ -364,6 +365,7 @@ class Form(object):
             harmonies = self.harmonies[i]
             unused = self.unused_harmonies[i]
             rhythm = self.raw_harmonic_rhythm[i]
+            len_rhythm = len(rhythm)
             soloist_name = soloists[i]
             action = actions[i]
 
@@ -371,6 +373,20 @@ class Form(object):
 
             if soloist_name:
                 soloist = self.score[soloist_name]
+
+
+                rests = []
+                if action == 'enter':
+                    enter_index = 0
+                    if len_rhythm == 2:
+                        enter_index = 1
+                    if len_rhythm > 2:
+                        opts = range(1, len_rhythm - 1)
+                        enter_index = random.choice(opts)
+                    for _ in harmonies[:enter_index]:
+                        rests.append('r')
+                    harmonies, unused = harmonies[enter_index:], unused[enter_index:]
+
 
                 # TODO if action is entering or exiting:
                 # - choose when to enter/exit
@@ -383,8 +399,29 @@ class Form(object):
                     pitch = solo.next_soloist_note(soloist_name, previous, h, unused_h)
                     previous = pitch
                     pitches.append(pitch)
+
+                if action == 'enter':
+                    pitches = rests + pitches
+
+                # elif action == 'exiting':
+
                 bars = parse_rhythm(rhythm, pitches)
                 soloist[bar_index:bar_index + len(bars)] = bars
+
+                if action == 'enter' or action == 'exit':
+                    notes = []
+                    for bar in bars:
+                        for note in bar:
+                            if not is_rest(note):
+                                notes.append(note)
+                    if action == 'enter':
+                        crescendo(notes)
+                    elif action == 'exit':
+                        crescendo(notes, decrescendo=True)
+
+
+
+
             else:
                 # TODO this could be configured to change the register of the soloist for each movement
                 previous = 19
