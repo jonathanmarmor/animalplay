@@ -374,7 +374,6 @@ class Form(object):
             if soloist_name:
                 soloist = self.score[soloist_name]
 
-
                 rests = []
                 if action == 'enter':
                     enter_index = 0
@@ -386,13 +385,16 @@ class Form(object):
                     for _ in harmonies[:enter_index]:
                         rests.append('r')
                     harmonies, unused = harmonies[enter_index:], unused[enter_index:]
-
-
-                # TODO if action is entering or exiting:
-                # - choose when to enter/exit
-                # - fill the remainder with rests
-                # - add a crescendo/decrescendo
-                # if action ==
+                if action == 'exit':
+                    exit_index = 0
+                    if len_rhythm == 2:
+                        exit_index = 1
+                    if len_rhythm > 2:
+                        opts = range(1, len_rhythm - 1)
+                        exit_index = random.choice(opts)
+                    for _ in harmonies[exit_index:]:
+                        rests.append('r')
+                    harmonies, unused = harmonies[:exit_index], unused[:exit_index]
 
                 pitches = []
                 for h, unused_h in zip(harmonies, unused):
@@ -403,7 +405,8 @@ class Form(object):
                 if action == 'enter':
                     pitches = rests + pitches
 
-                # elif action == 'exiting':
+                elif action == 'exit':
+                    pitches = pitches + rests
 
                 bars = parse_rhythm(rhythm, pitches)
                 soloist[bar_index:bar_index + len(bars)] = bars
@@ -419,15 +422,9 @@ class Form(object):
                     elif action == 'exit':
                         crescendo(notes, decrescendo=True)
 
-
-
-
             else:
                 # TODO this could be configured to change the register of the soloist for each movement
                 previous = 19
-
-
-
 
     def make_drones(self):
         synth = self.score['Synthesizer']

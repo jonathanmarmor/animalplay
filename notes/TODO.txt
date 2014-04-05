@@ -9,7 +9,7 @@ x - redo bassline
 x - make mock up accompaniment parts
 x - make mock up soloist part
 x - fix ties in acc and solo parts
-- choose soloist entrance/exit times and add de/crescendos
+x - choose soloist entrance/exit times and add de/crescendos
 
 - add phrase-length harmonic rhythm options
 - make real accompaniment parts
@@ -26,7 +26,6 @@ x - fix ties in acc and solo parts
     - do we want to borrow some rhythms for the melody from one of the melody transcriptions I've been thinking about using for years? or from cpe bach israelites page 100?
 
 - clarinet part in Bb
-- diminuendo and crescendo in soloist parts
 
 - pick actual notes for piano right hand
 
