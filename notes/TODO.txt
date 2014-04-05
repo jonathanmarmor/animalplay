@@ -7,8 +7,11 @@ x - figure out correct tempo
 x - change existing harmonic rhythms to use new rhythm notation.
 x - redo bassline
 x - make mock up accompaniment parts
+x - make mock up soloist part
 
-- make mock up soloist part
+- fix ties in acc and solo parts
+- choose soloist entrance/exit times and add de/crescendos
+
 - add phrase-length harmonic rhythm options
 - make real accompaniment parts
 - choose density of out of tune notes

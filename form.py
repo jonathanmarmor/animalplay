@@ -333,7 +333,7 @@ class Form(object):
 
         for harmonies, unused, rhythm, section_configs in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm, self.volume_sections):
             bar_config = section_configs[0]
-            i = bar_config['bar_index']
+            bar_index = bar_config['bar_index']
             accompanists = bar_config['accompanists']
             if accompanists:
                 a_name, b_name = accompanists
@@ -350,11 +350,8 @@ class Form(object):
                 bars_a = parse_rhythm(rhythm, pitches_a)
                 bars_b = parse_rhythm(rhythm, pitches_b)
 
-                for bar_a, bar_b in zip(bars_a, bars_b):
-                    a[i] = bar_a
-                    b[i] = bar_b
-                    i += 1
-
+                a[bar_index:bar_index + len(bars_a)] = bars_a
+                b[bar_index:bar_index + len(bars_b)] = bars_b
 
     def make_soloist(self):
         soloists = [sec[0]['soloist'] for sec in self.volume_sections]
@@ -387,10 +384,7 @@ class Form(object):
                     previous = pitch
                     pitches.append(pitch)
                 bars = parse_rhythm(rhythm, pitches)
-
-                for bar in bars:
-                    soloist[bar_index] = bar
-                    bar_index += 1
+                soloist[bar_index:bar_index + len(bars)] = bars
             else:
                 # TODO this could be configured to change the register of the soloist for each movement
                 previous = 19
