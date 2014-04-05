@@ -103,36 +103,56 @@ def choose_drones():
 
 class Form(object):
     def __init__(self, score):
+        print 'making score'
         self.score = score
         self.bars = []
 
+        print 'choosing drones'
         self.drones = choose_drones()
 
+        print 'initializing harmony options'
         self.harmony = Harmony(self.drones)
 
+        print 'making configs for each bar'
         self.make_bars()
+        print 'making section config groupings'
         self.group_sections()
+        print 'creating staves'
         self.set_staves()
 
+        print 'adjusting soloist entrances'
         self.adjust_soloist_entrances()
 
+        print 'filling some staves with rests'
         self.temp_fill_with_rests()
 
+        print 'making harmonic rhythm'
         self.make_harmonic_rhythm()
+        print 'making drones'
         self.make_drones()
+        print 'choosing harmonies'
         self.choose_harmonies()
 
+        print 'making bassline'
         self.make_bassline()
+        print 'making soloist'
         self.make_soloist()
+        print 'making accompaniment'
         self.make_accompaniment()
+        print 'making piano right hand'
         self.make_piano_right_hand()
 
+        print 'adding rehearsal marks'
         self.add_rehearsal_marks()
+        print 'adding dynamics'
         self.add_dynamics()
+        print 'adding double barlines'
         self.add_double_barlines()
 
+        print 'adding final barline'
         self.add_final_barlines()
 
+        print 'Done!'
 
     def make_bars(self):
         bar_index = 0
@@ -385,13 +405,18 @@ class Form(object):
         actions = solo.get_actions(soloists)
 
         previous = None
+        previous_soloist_name = None
 
         for i, section_configs in enumerate(self.volume_sections):
+            print '\tVolume Section #{}'.format(i)
             harmonies = self.harmonies[i]
             unused = self.unused_harmonies[i]
             rhythm = self.raw_harmonic_rhythm[i]
             len_rhythm = len(rhythm)
             soloist_name = soloists[i]
+            if soloist_name != previous_soloist_name:
+                previous = None
+                previous_soloist_name = soloist_name
             action = actions[i]
 
             bar_index = section_configs[0]['bar_index']

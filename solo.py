@@ -51,7 +51,7 @@ def get_actions(soloists):
 
 
 def rank_by_distance(previous, options):
-    distance_preferences = [2, 1, 3, 4, 0, 5, 7, 6]
+    distance_preferences = [1, 2, 3, 0, 4, 5, 7, 6]
     distances = [abs(previous - p) for p in options]
     ranked = sorted(zip(distances, options), key=lambda x: distance_preferences.index(x[0]))
 
@@ -85,24 +85,6 @@ REGISTERS = {
 }
 
 
-# def get_options(previous, harmony, lowest, highest):
-#     return [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
-
-
-# def build_options(previous, harmony, unused_harmony, lowest, highest):
-#     unused_options = get_options(previous, unused_harmony, lowest, highest)
-#     unused_ranked = rank_by_distance(previous, unused_options)
-
-#     used = list(set(harmony) - set(unused_harmony))
-#     used_options = get_options(previous, used, lowest, highest)
-#     used_ranked = rank_by_distance(previous, used_options)
-#     options = unused_ranked + used_ranked
-
-#     return options
-
-
-
-
 def next_soloist_note(soloist_name, previous, harmony, movement_number):
     registers = REGISTERS[movement_number]
     register = registers[soloist_name]
@@ -113,14 +95,10 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number):
 
     options = [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
     ranked_by_distance = rank_by_distance(previous, options)
-
     weights = exp_weights(len(ranked_by_distance))
+    pitch = weighted_choice(ranked_by_distance, weights)
 
-    return weighted_choice(ranked_by_distance, weights)
-
-
-
-
+    return pitch
 
 
 if __name__ == '__main__':

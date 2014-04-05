@@ -14,13 +14,15 @@ x - make real accompaniment parts
 
 
 - make soloist part for real
-    - pick pitches
+    x - pick pitches
     - extra rhythmic notes
     - extra ties
     - choose density of out of tune notes by volume section
     - out of tune notes
     - ornaments
     - make it likely to have scalar motion. try n-grams instead of just previous
+    - glissandi?
+    - incorporate some transcribed melodies?
 
 
 
@@ -42,5 +44,4 @@ x - make real accompaniment parts
 - last two bars should have some sort of rhythmic ending (half half whole for example)
 
 x - [forced all flats] force all sharps or all flats? (send score to Katie and Devin to critique the notation)
-
-- switch clefs where appropriate in cello
+x - switch clefs where appropriate in cello
