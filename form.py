@@ -124,8 +124,8 @@ class Form(object):
         self.choose_harmonies()
 
         self.make_bassline()
-        self.make_accompaniment()
         self.make_soloist()
+        self.make_accompaniment()
         self.make_piano_right_hand()
 
         self.add_rehearsal_marks()
@@ -254,7 +254,7 @@ class Form(object):
             add_final_barline(staff)
 
     def temp_fill_with_rests(self):
-        no = ['Synthesizer', 'Piano upper', 'Piano lower']
+        no = ['Synthesizer', 'Piano lower', 'Piano upper']
         staves = [s for s in self.staves if s.name not in no]
         for staff in staves:
 

@@ -10,16 +10,22 @@ x - make mock up accompaniment parts
 x - make mock up soloist part
 x - fix ties in acc and solo parts
 x - choose soloist entrance/exit times and add de/crescendos
+x - make real accompaniment parts
 
 
-- choose density of out of tune notes
 - make soloist part for real
-- ornaments in soloist part
+    - pick pitches
+    - extra rhythmic notes
+    - extra ties
+    - choose density of out of tune notes by volume section
+    - out of tune notes
+    - ornaments
+    - make it likely to have scalar motion. try n-grams instead of just previous
 
 
 
 - add phrase-length harmonic rhythm options
-- make real accompaniment parts
+
 - double stops in accompaniment parts
 - out of tune notes in accompaniment parts
 

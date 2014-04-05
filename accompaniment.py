@@ -5,7 +5,7 @@ from utils import get_interval_class, exp_weights, weighted_choice
 
 
 def rank_by_distance(previous, options):
-    distance_preferences = [2, 1, 3, 4, 0, 5, 7, 6]
+    distance_preferences = [2, 1, 0, 3, 4, 5, 7, 6]
     distances = [abs(previous - p) for p in options]
     ranked = sorted(zip(distances, options), key=lambda x: distance_preferences.index(x[0]))
 
@@ -97,6 +97,9 @@ def next_accompaniment_notes(name_a, name_b, previous_a, previous_b, harmony, un
             elif interval_class in [2, 0]:
                 weight = max_weight / 2
             elif interval_class == 6:
+                weight = 0
+
+            if a == b:
                 weight = 0
 
             weight = weight + a_weight + b_weight
