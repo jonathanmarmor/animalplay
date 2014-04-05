@@ -37,3 +37,4 @@ x - choose soloist entrance/exit times and add de/crescendos
 
 x - [forced all flats] force all sharps or all flats? (send score to Katie and Devin to critique the notation)
 
+- switch clefs where appropriate in cello

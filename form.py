@@ -23,6 +23,7 @@ from abjad_utils import (
 import harmonic_rhythm
 from harmony import Harmony
 from piano_lower import next_piano_bass_note
+from piano_upper import next_piano_right_hand_chord
 from accompaniment import next_accompaniment_notes
 import solo
 
@@ -119,15 +120,13 @@ class Form(object):
         self.temp_fill_with_rests()
 
         self.make_harmonic_rhythm()
-
         self.make_drones()
-
         self.choose_harmonies()
+
         self.make_bassline()
-
         self.make_accompaniment()
-
         self.make_soloist()
+        self.make_piano_right_hand()
 
         self.add_rehearsal_marks()
         self.add_dynamics()
@@ -269,12 +268,23 @@ class Form(object):
             self.harmonic_rhythm.append(bars)
 
     def choose_harmonies(self):
-        piano_upper = self.score['Piano'][0]
         for drone, rhythm in zip(self.harmonic_rhythm_drones, self.raw_harmonic_rhythm):
             pitches = [self.harmony.choose(d) for d in drone]
             self.harmonies.append(pitches)
             self.unused_harmonies.append([p[:] for p in pitches[:]])
-            bars = parse_rhythm(rhythm, pitches=pitches)
+
+    def make_piano_right_hand(self):
+        piano_upper = self.score['Piano'][0]
+        previous = [0, 4, 7, 10]
+        for harmonies, unused, rhythm in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm):
+            chords = []
+            for h, unused_h in zip(harmonies, unused):
+                chord = next_piano_right_hand_chord(previous, h, unused_h)
+                previous = chord
+                chords.append(chord)
+                # [unused_h.remove(pitch % 12) for pitch in chord]
+
+            bars = parse_rhythm(rhythm, chords)
             piano_upper.extend(bars)
 
     def make_bassline(self):
@@ -341,8 +351,8 @@ class Form(object):
                 bar['soloist'] = next_soloist
 
     def make_accompaniment(self):
-        previous_a = 12
-        previous_b = 7
+        previous_a = None
+        previous_b = None
 
         for harmonies, unused, rhythm, section_configs in zip(self.harmonies, self.unused_harmonies, self.raw_harmonic_rhythm, self.volume_sections):
             bar_config = section_configs[0]
@@ -356,7 +366,7 @@ class Form(object):
                 pitches_a = []
                 pitches_b = []
                 for h, unused_h in zip(harmonies, unused):
-                    pitch_a, pitch_b = next_accompaniment_notes(a_name, b_name, previous_a, previous_b, h, unused_h)
+                    pitch_a, pitch_b = next_accompaniment_notes(a_name, b_name, previous_a, previous_b, h, unused_h, bar_config['movement_number'])
                     previous_a, previous_b = pitch_a, pitch_b
                     pitches_a.append(pitch_a)
                     pitches_b.append(pitch_b)
@@ -365,6 +375,10 @@ class Form(object):
 
                 a[bar_index:bar_index + len(bars_a)] = bars_a
                 b[bar_index:bar_index + len(bars_b)] = bars_b
+            else:
+                previous_a = None
+                previous_b = None
+
 
     def make_soloist(self):
         soloists = [sec[0]['soloist'] for sec in self.volume_sections]

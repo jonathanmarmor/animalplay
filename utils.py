@@ -125,3 +125,86 @@ def exp_weights(n, exponent=2, reverse=True):
     weights = [(x + 1) ** exponent for x in range(n)]
     weights.reverse()
     return weights
+
+
+def get_interval_class(a, b):
+    """Returns the interval class between two pitches as a number between 0 and 6.
+
+    >>> get_interval_class(0, 5)
+    5
+
+    >>> get_interval_class(0, 7)
+    5
+
+    >>> get_interval_class(5, 0)
+    5
+
+    >>> get_interval_class(7, 0)
+    5
+
+    >>> get_interval_class(12, 5)
+    5
+
+    >>> get_interval_class(5, 12)
+    5
+
+    >>> get_interval_class(12, 7)
+    5
+
+    >>> get_interval_class(7, 12)
+    5
+
+
+
+    >>> get_interval_class(1, 6)
+    5
+
+    >>> get_interval_class(1, 8)
+    5
+
+    >>> get_interval_class(6, 1)
+    5
+
+    >>> get_interval_class(8, 1)
+    5
+
+    >>> get_interval_class(13, 6)
+    5
+
+    >>> get_interval_class(6, 13)
+    5
+
+    >>> get_interval_class(13, 8)
+    5
+
+    >>> get_interval_class(8, 13)
+    5
+
+
+    >>> get_interval_class(20, 13)
+    5
+
+    >>> get_interval_class(20, -11)
+    5
+
+    >>> get_interval_class(-11, 20)
+    5
+
+    >>> get_interval_class(-11, -4)
+    5
+
+    >>> get_interval_class(-23, -16)
+    5
+
+    """
+    a = a % 12
+    b = b % 12
+    interval = abs(a - b)
+    if interval > 6:
+        interval = 12 - interval
+    return interval
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

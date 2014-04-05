@@ -1,11 +1,106 @@
 import random
+from itertools import groupby
+
+from utils import get_interval_class, exp_weights, weighted_choice
 
 
-def next_accompaniment_notes(name_a, name_b, previous_a, previous_b, harmony, unused_harmony):
+def rank_by_distance(previous, options):
+    distance_preferences = [2, 1, 3, 4, 0, 5, 7, 6]
+    distances = [abs(previous - p) for p in options]
+    ranked = sorted(zip(distances, options), key=lambda x: distance_preferences.index(x[0]))
+
+    # Shuffle rank of pitches that have the same distance
+    distance_groups = groupby(ranked, key=lambda x: x[0])
+    new_ranks = []
+    for distance, group in distance_groups:
+        group = list(group)
+        random.shuffle(group)
+        new_ranks.extend(group)
+
+    return [item[1] for item in new_ranks]
 
 
-    pitch_a = random.choice(unused_harmony)
-    # unused_harmony.remove(pitch_a % 12)
-    pitch_b = random.choice(unused_harmony)
-    # unused_harmony.remove(pitch_b % 12)
-    return pitch_a, pitch_b
+
+
+# TODO change these based on instrument and movement number
+LOWEST_PITCH = 0
+HIGHEST_PITCH = 24
+
+
+REGISTERS = {
+    0: {
+        'Bb Clarinet': {'lowest': -10, 'highest': 10},
+        'Cello': {'lowest': -10, 'highest': 10},
+    },
+    1: {
+        'Violin': {'lowest': -5, 'highest': 15},
+        'Bb Clarinet': {'lowest': -10, 'highest': 10},
+        'Cello': {'lowest': -10, 'highest': 10},
+    },
+    2: {
+        'Violin': {'lowest': -5, 'highest': 15},
+        'Bb Clarinet': {'lowest': -10, 'highest': 10},
+        'Cello': {'lowest': -10, 'highest': 10},
+    },
+    3: {
+        'Violin': {'lowest': 0, 'highest': 24},
+        'Bb Clarinet': {'lowest': 0, 'highest': 24},
+        'Cello': {'lowest': -10, 'highest': 10},
+    },
+}
+
+
+def get_options(previous, harmony, lowest, highest):
+    return [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
+
+
+def build_options(previous, harmony, unused_harmony, lowest, highest):
+    unused_options = get_options(previous, unused_harmony, lowest, highest)
+    unused_ranked = rank_by_distance(previous, unused_options)
+
+    used = list(set(harmony) - set(unused_harmony))
+    used_options = get_options(previous, used, lowest, highest)
+    used_ranked = rank_by_distance(previous, used_options)
+    options = unused_ranked + used_ranked
+
+    return options
+
+
+def next_accompaniment_notes(name_a, name_b, previous_a, previous_b, harmony, unused_harmony, movement_number):
+    registers = REGISTERS[movement_number]
+
+    a_register = registers[name_a]
+    b_register = registers[name_b]
+
+    if previous_a == None:
+        previous_a = random.randint(a_register['lowest'], a_register['highest'])
+
+    if previous_b == None:
+        previous_b = random.randint(b_register['lowest'], b_register['highest'])
+
+    a_options = build_options(previous_a, harmony, unused_harmony, a_register['lowest'], registers[name_a]['highest'])
+    b_options = build_options(previous_b, harmony, unused_harmony, b_register['lowest'], registers[name_b]['highest'])
+
+    a_weights = exp_weights(len(a_options))
+    b_weights = exp_weights(len(b_options))
+
+    max_weight = a_weights[0] + b_weights[0]
+
+    weighted_interval_options = []
+    for a, a_weight in zip(a_options, a_weights):
+        for b, b_weight in zip(b_options, b_weights):
+            interval_class = get_interval_class(a, b)
+            if interval_class == 1:
+                continue
+            if interval_class in [5, 4, 3]:
+                weight = max_weight
+            elif interval_class in [2, 0]:
+                weight = max_weight / 2
+            elif interval_class == 6:
+                weight = 0
+
+            weight = weight + a_weight + b_weight
+
+            weighted_interval_options.append(((a, b), weight))
+
+    return weighted_choice(*zip(*weighted_interval_options))
