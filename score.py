@@ -33,6 +33,8 @@ def get_melody_staff(instrument_class, instrument_name, short_instrument_name):
     attach(instrument, staff)
     add_time_signature(staff)
     add_tempo(staff)
+    if instrument_name == 'Cello':
+        attach(Clef('bass'), staff)
     return staff
 
 def get_piano_staff():

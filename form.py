@@ -467,9 +467,6 @@ class Form(object):
                 bars = parse_rhythm(rhythm, pitches)
                 soloist[bar_index:bar_index + len(bars)] = bars
 
-                if soloist_name == 'Cello':
-                    clef(soloist[bar_index], 'bass')
-
                 if action == 'enter' or action == 'exit':
                     notes = []
                     for bar in bars:
