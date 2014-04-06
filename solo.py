@@ -118,7 +118,7 @@ def replace_note(duration):
         return weighted_choice(options, weights)
 
     elif duration == (8, 8):
-        options = [[12, 4], [(8, 6), 2], [4, 12], [4, (4, 4), 4]]
+        options = [[(8, 4), 4], [(8, 6), 2], [4, (4, 8)], [4, (4, 4), 4]]
         weights = range(len(options), 0, -1)
         return weighted_choice(options, weights)
 

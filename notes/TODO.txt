@@ -17,7 +17,7 @@ x - make real accompaniment parts
     x - pick pitches
     x - extra rhythmic notes
 
-    - extra ties
+    [gave up on this. too difficult to isolate from other stuff.] - extra ties
 
     - choose density of out of tune notes by volume section
     - out of tune notes
