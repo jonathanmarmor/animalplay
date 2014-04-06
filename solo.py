@@ -1,5 +1,6 @@
 import random
 from itertools import groupby
+from collections import defaultdict
 
 from utils import weighted_choice, exp_weights
 
@@ -128,32 +129,26 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number, volume_s
     return pitch
 
 
+REPLACE = defaultdict(dict)
+REPLACE[16]['options'] = [[12, 4], [(12, 2), 2], [8, 8], [8, 6, 2], [6, 2, 8], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6], [6, (2, 6), 2]]
+REPLACE[16]['weights'] = range(len(REPLACE[16]['options']), 0, -1)
+
+REPLACE[(16, 8)]['options'] = [[12, (4, 8)], [(16, 4), 4], [(16, 6), 2], [4, (12, 8)], [8, (8, 4), 4], [8, (8, 6), 2], [8, (8, 2), 6], [(16, 2), 6]]
+REPLACE[(16, 8)]['weights'] = range(len(REPLACE[(16, 8)]['options']), 0, -1)
+
+REPLACE[(8, 16)]['options'] = [[(8, 12), 4], [(8, 8), 8], [(8, 8, 6), 2], [4, (4, 16)], [4, (4, 12), 4]]
+REPLACE[(8, 16)]['weights'] = range(len(REPLACE[(8, 16)]['options']), 0, -1)
+
+REPLACE[(8, 8)]['options'] = [[(8, 4), 4], [(8, 6), 2], [4, (4, 8)], [4, (4, 4), 4]]
+REPLACE[(8, 8)]['weights'] = range(len(REPLACE[(8, 8)]['options']), 0, -1)
+
+REPLACE[8]['options'] = [[4, 4], [6, 2], [2, 6], [2, (2, 2), 2]]
+REPLACE[8]['weights'] = exp_weights(len(REPLACE[8]['options']), exponent=1.8)
+
+
 def replace_note(duration):
-    if duration == 16:
-        options = [[12, 4], [(12, 2), 2], [8, 8], [8, 6, 2], [6, 2, 8], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6], [6, (2, 6), 2]]
-        weights = range(len(options), 0, -1)
-        return weighted_choice(options, weights)
-
-    elif duration == (16, 8):
-        options = [[12, (4, 8)], [(16, 4), 4], [(16, 6), 2], [4, (12, 8)], [8, (8, 4), 4], [8, (8, 6), 2], [8, (8, 2), 6], [(16, 2), 6]]
-        weights = range(len(options), 0, -1)
-        return weighted_choice(options, weights)
-
-    elif duration == (8, 16):
-        options = [[(8, 12), 4], [(8, 8), 8], [(8, 8, 6), 2], [4, (4, 16)], [4, (4, 12), 4]]
-        weights = range(len(options), 0, -1)
-        return weighted_choice(options, weights)
-
-    elif duration == (8, 8):
-        options = [[(8, 4), 4], [(8, 6), 2], [4, (4, 8)], [4, (4, 4), 4]]
-        weights = range(len(options), 0, -1)
-        return weighted_choice(options, weights)
-
-    elif duration == 8:
-        options = [[4, 4], [6, 2], [2, 6], [2, (2, 2), 2]]
-        weights = exp_weights(len(options), exponent=1.8)
-        return weighted_choice(options, weights)
-
+    if duration in REPLACE:
+        return weighted_choice(REPLACE[duration]['options'], REPLACE[duration]['weights'] )
     else:
         return [duration]
 
