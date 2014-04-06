@@ -457,7 +457,7 @@ class Form(object):
 
                 pitches = []
                 for h, unused_h in zip(harmonies, unused):
-                    pitch = solo.next_soloist_note(soloist_name, previous, h, movement_number)
+                    pitch = solo.next_soloist_note(soloist_name, previous, h, movement_number, i)
                     if isinstance(pitch, int):
                         previous = pitch
 

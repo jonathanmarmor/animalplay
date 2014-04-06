@@ -84,8 +84,24 @@ REGISTERS = {
     },
 }
 
+OUT_OF_TUNE_RATE = \
+    [random.uniform(0.0, 0.6) for _ in range(8)] + \
+    [random.uniform(0.0, 0.2) for _ in range(8)] + \
+    [random.uniform(0.0, 0.1) for _ in range(8)] + \
+    [random.uniform(0.0, 0.2) for _ in range(8)]
 
-def next_soloist_note(soloist_name, previous, harmony, movement_number, out_of_tune_rate=0.5):
+FIRST_NOTE = True
+
+def next_soloist_note(soloist_name, previous, harmony, movement_number, volume_section_number):
+    out_of_tune_rate = OUT_OF_TUNE_RATE[volume_section_number]
+    global FIRST_NOTE
+    if FIRST_NOTE:
+        out_of_tune_rate = 1.0
+        FIRST_NOTE = False
+
+    if soloist_name == 'Bb Clarinet':
+        out_of_tune_rate = 0.0
+
     registers = REGISTERS[movement_number]
     register = registers[soloist_name]
     lowest = register['lowest']

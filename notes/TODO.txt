@@ -19,7 +19,7 @@ x - make soloist part for real
     [gave up on this. too difficult to isolate from other stuff.] - extra ties
     x - out of tune notes
 
-- choose density of out of tune notes by volume section (for solo part) (Make sure there are no out of tune notes written for clarinet)
+x - choose density of out of tune notes by volume section (for solo part) (Make sure there are no out of tune notes written for clarinet)
 - solo part ornaments (via rhythm replacement, or grace notes?)
 - add phrase-length harmonic rhythm options
 - double stops in accompaniment parts 3rd movement
