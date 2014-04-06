@@ -187,6 +187,29 @@ def add_notes(rhythm, harmonies, unused):
     return newer_rhythm, newer_harmonies, newer_unused
 
 
+def join_some_notes(rhythm, pitches):
+    both = zip(rhythm, pitches)
+    new_rhythm = []
+    new_pitches = []
+    for pitch, group in groupby(both, key=lambda x: x[1]):
+        group = list(group)
+        if len(group) == 2 and pitch != 'r' and random.random() < 0.5:
+            new_r = []
+            for r, p in group:
+                if isinstance(r, tuple):
+                    for rr in r:
+                        new_r.append(rr)
+                else:
+                    new_r.append(r)
+            new_rhythm.append(tuple(new_r))
+            new_pitches.append(pitch)
+        else:
+            for r, p in group:
+                new_rhythm.append(r)
+                new_pitches.append(p)
+    return new_rhythm, new_pitches
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()

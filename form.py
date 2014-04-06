@@ -475,6 +475,9 @@ class Form(object):
                 elif action == 'exit':
                     pitches = pitches + rests
 
+
+                rhythm, pitches = solo.join_some_notes(rhythm, pitches)
+
                 bars = parse_rhythm(rhythm, pitches)
                 soloist[bar_index:bar_index + len(bars)] = bars
 
