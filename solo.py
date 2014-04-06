@@ -51,7 +51,7 @@ def get_actions(soloists):
 
 
 def rank_by_distance(previous, options):
-    distance_preferences = [1, 2, 3, 0, 4, 5, 7, 6]
+    distance_preferences = [1, 2, 3, 4, 0, 5, 7, 6]
     distances = [abs(previous - p) for p in options]
     ranked = sorted(zip(distances, options), key=lambda x: distance_preferences.index(x[0]))
 
@@ -95,10 +95,29 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number):
 
     options = [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
     ranked_by_distance = rank_by_distance(previous, options)
-    weights = exp_weights(len(ranked_by_distance))
+    weights = exp_weights(len(ranked_by_distance), exponent=1.5)
     pitch = weighted_choice(ranked_by_distance, weights)
 
     return pitch
+
+
+def add_notes(rhythm, harmonies, unused):
+    """Take a raw harmonic rhythm and add more notes by getting rid of ties and potentially subdividing exisisting notes."""
+    new_rhythm = []
+    new_harmonies = []
+    new_unused = []
+    for duration, harmony, unused_harmony in zip(rhythm, harmonies, unused):
+        if isinstance(duration, tuple) and random.random() > 0.3:
+            for dur in duration:
+                new_rhythm.append(dur)
+                new_harmonies.append(harmony)
+                new_unused.append(unused_harmony)
+        else:
+            new_rhythm.append(duration)
+            new_harmonies.append(harmony)
+            new_unused.append(unused_harmony)
+
+    return new_rhythm, new_harmonies, new_unused
 
 
 if __name__ == '__main__':

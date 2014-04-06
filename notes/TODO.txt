@@ -15,17 +15,20 @@ x - make real accompaniment parts
 
 - make soloist part for real
     x - pick pitches
+    x - extra rhythmic notes
 
-    - extra rhythmic notes
     - extra ties
+
     - choose density of out of tune notes by volume section
     - out of tune notes
 
-    - ornaments
+    - ornaments (via rhythm replacement, or grace notes?)
     - make it likely to have scalar motion. try n-grams instead of just previous
     - glissandi?
     - incorporate some transcribed melodies?
 
+- add extra notes in accompaniment parts (more sparingly than soloist, both acc parts in rhythmic unison)
+- extra ties in acc parts (both acc parts in rhythmic unison) -- how to find adjacent harmonies with common tones? maybe this is too ambitious.
 
 
 - add phrase-length harmonic rhythm options
@@ -38,6 +41,10 @@ x - make real accompaniment parts
     - go through and tie together some consecutive notes with the same pitch. maybe do 80% or something.
     - is there ever a time when we'd want a completely different rhythm in the melody or accompaniment?
     - do we want to borrow some rhythms for the melody from one of the melody transcriptions I've been thinking about using for years? or from cpe bach israelites page 100?
+
+- add even more extra rhythm notes for soloist:
+    - replace some whole notes with [12, 4], [(12, 2), 2], [8, 8], [6, 2, 8], [8, 6, 2], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6] and half notes with [4, 4] and [6, 2]
+    - use this method of replacement to add ornaments? if so, how to connect with pitch of first note in next bar?
 
 - clarinet part in Bb
 

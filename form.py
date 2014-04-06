@@ -426,7 +426,7 @@ class Form(object):
                 unused = self.unused_harmonies[i]
                 rhythm = self.raw_harmonic_rhythm[i]
 
-                rhythm, harmonies, unused = harmonic_rhythm.add_notes(rhythm, harmonies, unused)
+                rhythm, harmonies, unused = solo.add_notes(rhythm, harmonies, unused)
 
                 len_rhythm = len(rhythm)
 
