@@ -108,7 +108,7 @@ def add_accompaniment_notes(rhythm, harmonies, unused):
     new_harmonies = []
     new_unused = []
     for duration, harmony, unused_harmony in zip(rhythm, harmonies, unused):
-        if isinstance(duration, tuple) and random.random() > 0.7:
+        if isinstance(duration, tuple) and random.random() > 0.6:
             for dur in duration:
                 new_rhythm.append(dur)
                 new_harmonies.append(harmony)

@@ -51,7 +51,7 @@ def get_actions(soloists):
 
 
 def rank_by_distance(previous, options):
-    distance_preferences = [1, 2, 3, 4, 0, 5, 7, 6]
+    distance_preferences = [1, 2, 3, 4, 5, 0, 7, 6]
     distances = [abs(previous - p) for p in options]
     ranked = sorted(zip(distances, options), key=lambda x: distance_preferences.index(x[0]))
 
@@ -101,13 +101,43 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number):
     return pitch
 
 
+def replace_note(duration):
+    if duration == 16:
+        options = [[12, 4], [(12, 2), 2], [8, 8], [8, 6, 2], [6, 2, 8], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6], [6, (2, 6), 2]]
+        weights = range(len(options), 0, -1)
+        return weighted_choice(options, weights)
+
+    elif duration == (16, 8):
+        options = [[12, (4, 8)], [(16, 4), 4], [(16, 6), 2], [4, (12, 8)], [8, (8, 4), 4], [8, (8, 6), 2], [8, (8, 2), 6], [(16, 2), 6]]
+        weights = range(len(options), 0, -1)
+        return weighted_choice(options, weights)
+
+    elif duration == (8, 16):
+        options = [[(8, 12), 4], [(8, 8), 8], [(8, 8, 6), 2], [4, (4, 16)], [4, (4, 12), 4]]
+        weights = range(len(options), 0, -1)
+        return weighted_choice(options, weights)
+
+    elif duration == (8, 8):
+        options = [[12, 4], [(8, 6), 2], [4, 12], [4, (4, 4), 4]]
+        weights = range(len(options), 0, -1)
+        return weighted_choice(options, weights)
+
+    elif duration == 8:
+        options = [[4, 4], [6, 2], [2, 6], [2, (2, 2), 2]]
+        weights = exp_weights(len(options), exponent=1.8)
+        return weighted_choice(options, weights)
+
+    else:
+        return [duration]
+
+
 def add_notes(rhythm, harmonies, unused):
     """Take a raw harmonic rhythm and add more notes by getting rid of ties and potentially subdividing exisisting notes."""
     new_rhythm = []
     new_harmonies = []
     new_unused = []
     for duration, harmony, unused_harmony in zip(rhythm, harmonies, unused):
-        if isinstance(duration, tuple) and random.random() > 0.4:
+        if isinstance(duration, tuple) and random.random() > 0.5:
             for dur in duration:
                 new_rhythm.append(dur)
                 new_harmonies.append(harmony)
@@ -117,7 +147,22 @@ def add_notes(rhythm, harmonies, unused):
             new_harmonies.append(harmony)
             new_unused.append(unused_harmony)
 
-    return new_rhythm, new_harmonies, new_unused
+    newer_rhythm = []
+    newer_harmonies = []
+    newer_unused = []
+    for duration, harmony, unused_harmony in zip(new_rhythm, new_harmonies, new_unused):
+        if random.random() > 0.85:
+            durations = replace_note(duration)
+            for duration in durations:
+                newer_rhythm.append(duration)
+                newer_harmonies.append(harmony)
+                newer_unused.append(unused_harmony)
+        else:
+            newer_rhythm.append(duration)
+            newer_harmonies.append(harmony)
+            newer_unused.append(unused_harmony)
+
+    return newer_rhythm, newer_harmonies, newer_unused
 
 
 if __name__ == '__main__':
