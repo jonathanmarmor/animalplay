@@ -102,13 +102,13 @@ def next_accompaniment_notes(name_a, name_b, previous_a, previous_b, harmony, un
     return weighted_choice(*zip(*weighted_interval_options))
 
 
-def add_notes(rhythm, harmonies, unused):
+def add_accompaniment_notes(rhythm, harmonies, unused):
     """Take a raw harmonic rhythm and add more notes by getting rid of ties and potentially subdividing exisisting notes."""
     new_rhythm = []
     new_harmonies = []
     new_unused = []
     for duration, harmony, unused_harmony in zip(rhythm, harmonies, unused):
-        if isinstance(duration, tuple) and random.random() > 0.3:
+        if isinstance(duration, tuple) and random.random() > 0.7:
             for dur in duration:
                 new_rhythm.append(dur)
                 new_harmonies.append(harmony)

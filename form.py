@@ -23,7 +23,7 @@ import harmonic_rhythm
 from harmony import Harmony
 from piano_lower import next_piano_bass_note
 from piano_upper import next_piano_right_hand_chord
-from accompaniment import next_accompaniment_notes
+from accompaniment import next_accompaniment_notes, add_accompaniment_notes
 import solo
 
 
@@ -378,6 +378,9 @@ class Form(object):
             bar_index = bar_config['bar_index']
             accompanists = bar_config['accompanists']
             if accompanists:
+
+                rhythm, harmonies, unused = add_accompaniment_notes(rhythm, harmonies, unused)
+
                 a_name, b_name = accompanists
                 a = self.score[a_name]
                 b = self.score[b_name]
