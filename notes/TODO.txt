@@ -20,8 +20,11 @@ x - make soloist part for real
     x - out of tune notes
 
 x - choose density of out of tune notes by volume section (for solo part) (Make sure there are no out of tune notes written for clarinet)
-- solo part ornaments (via rhythm replacement, or grace notes?)
+x - join some repeated notes in the solo part
+
 - add phrase-length harmonic rhythm options
+
+- solo part ornaments (via rhythm replacement, or grace notes?)
 - double stops in accompaniment parts 3rd movement
 - out of tune notes in accompaniment parts 3rd movement
 - pick actual notes for piano right hand

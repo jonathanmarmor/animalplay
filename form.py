@@ -15,10 +15,10 @@ from abjad_utils import (
     add_final_barline,
     add_double_barline,
     is_rest,
-    parse_rhythm,
     crescendo,
     clef,
 )
+from parse_rhythm import parse_rhythm
 import harmonic_rhythm
 from harmony import Harmony
 from piano_lower import next_piano_bass_note
@@ -112,6 +112,9 @@ class Form(object):
 
         print 'initializing harmony options'
         self.harmony = Harmony(self.drones)
+
+        print 'initializing harmonic rhythm options'
+        self.harmonic_rhythm_factory = harmonic_rhythm.HarmonicRhythm()
 
         print 'making configs for each bar'
         self.make_bars()
@@ -282,7 +285,8 @@ class Form(object):
 
     def make_harmonic_rhythm(self):
         for phrase in self.volume_sections:
-            raw, bars = harmonic_rhythm.choose(phrase)
+            raw, bars = self.harmonic_rhythm_factory.choose(phrase)
+            assert len(bars) == len(phrase)
             self.raw_harmonic_rhythm.append(raw)
             self.harmonic_rhythm.append(bars)
 

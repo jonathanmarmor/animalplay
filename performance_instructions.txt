@@ -2,6 +2,7 @@ Performance Instructions:
 
 Everyone
 - Accidentals are remembered to the end of the measure in which they occur and only in their own octave.
+- Assume everything is slurred and tenuto whenever possible.
 
 Violin and Cello
 - Notated dyads of a minor second or major second should be played as a single note. Pick any pitch between the two notated pitches.

@@ -205,6 +205,22 @@ def get_interval_class(a, b):
     return interval
 
 
+def break_down(n):
+    """Get all the ways an integer can be broken into 2s and 1s. I'm sure there's a more elegant way to do this.
+    >>> break_down(4)
+    [[1, 1, 1, 1], [1, 1, 2], [2, 2]]
+
+    """
+    temp = [1] * n
+    rv = [temp[:]]
+    while temp.count(1) >= 2:
+        temp.remove(1)
+        temp.remove(1)
+        temp.append(2)
+        rv.append(temp[:])
+    return rv
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
