@@ -85,7 +85,7 @@ REGISTERS = {
 }
 
 
-def next_soloist_note(soloist_name, previous, harmony, movement_number):
+def next_soloist_note(soloist_name, previous, harmony, movement_number, out_of_tune_rate=0.5):
     registers = REGISTERS[movement_number]
     register = registers[soloist_name]
     lowest = register['lowest']
@@ -93,10 +93,21 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number):
     if previous == None:
         previous = random.randint(lowest, highest)
 
-    options = [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
-    ranked_by_distance = rank_by_distance(previous, options)
-    weights = exp_weights(len(ranked_by_distance), exponent=1.5)
-    pitch = weighted_choice(ranked_by_distance, weights)
+    if random.random() < out_of_tune_rate:
+        options = [p for p in range(previous - 2, previous + 3) if p >= lowest and p <= highest]
+        p = random.choice(options)
+        interval = random.choice([1, 2])
+        if interval == 2:
+            pitch = [p - 1, p + 1]
+        elif interval == 1:
+            up_or_down = random.choice([1, -1])
+            pitch = [p, p + up_or_down]
+            pitch.sort()
+    else:
+        options = [p for p in range(previous - 7, previous + 8) if p % 12 in harmony and p >= lowest and p <= highest]
+        ranked_by_distance = rank_by_distance(previous, options)
+        weights = exp_weights(len(ranked_by_distance), exponent=1.5)
+        pitch = weighted_choice(ranked_by_distance, weights)
 
     return pitch
 

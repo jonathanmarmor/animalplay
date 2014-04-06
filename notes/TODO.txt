@@ -10,47 +10,41 @@ x - make mock up accompaniment parts
 x - make mock up soloist part
 x - fix ties in acc and solo parts
 x - choose soloist entrance/exit times and add de/crescendos
+x - [forced all flats] force all sharps or all flats? (send score to Katie and Devin to critique the notation)
+x - switch clefs where appropriate in cello
 x - make real accompaniment parts
-
-
-- make soloist part for real
+x - make soloist part for real
     x - pick pitches
     x - extra rhythmic notes
-
     [gave up on this. too difficult to isolate from other stuff.] - extra ties
+    x - out of tune notes
 
-    - choose density of out of tune notes by volume section
-    - out of tune notes
+- choose density of out of tune notes by volume section (for solo part)
+- solo part ornaments (via rhythm replacement, or grace notes?)
+- add phrase-length harmonic rhythm options
+- double stops in accompaniment parts 3rd movement
+- out of tune notes in accompaniment parts 3rd movement
+- pick actual notes for piano right hand
+- last two bars should have some sort of rhythmic ending (half half whole for example)
+- clarinet part in Bb
+- occassional fifths in piano left hand
 
-    - ornaments (via rhythm replacement, or grace notes?)
-    - make it likely to have scalar motion. try n-grams instead of just previous
-    - glissandi?
-    - incorporate some transcribed melodies?
 
+
+
+- solo part: make it likely to have scalar motion. try n-grams instead of just previous
+- solo part: glissandi?
+- solo part: incorporate some transcribed melodies?
 - add extra notes in accompaniment parts (more sparingly than soloist, both acc parts in rhythmic unison)
 - extra ties in acc parts (both acc parts in rhythmic unison) -- how to find adjacent harmonies with common tones? maybe this is too ambitious.
 
 
-- add phrase-length harmonic rhythm options
-
-- double stops in accompaniment parts
-- out of tune notes in accompaniment parts
-
 - use alternate rhythms in soloist, accompaniment, and piano left hand
-    - for soloist, add some extra notes on top of the existing harmonic rhythm
+    x - for soloist, add some extra notes on top of the existing harmonic rhythm
     - go through and tie together some consecutive notes with the same pitch. maybe do 80% or something.
     - is there ever a time when we'd want a completely different rhythm in the melody or accompaniment?
     - do we want to borrow some rhythms for the melody from one of the melody transcriptions I've been thinking about using for years? or from cpe bach israelites page 100?
 
-- add even more extra rhythm notes for soloist:
-    - replace some whole notes with [12, 4], [(12, 2), 2], [8, 8], [6, 2, 8], [8, 6, 2], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6] and half notes with [4, 4] and [6, 2]
+x - add even more extra rhythm notes for soloist:
+    x - replace some whole notes with [12, 4], [(12, 2), 2], [8, 8], [6, 2, 8], [8, 6, 2], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6] and half notes with [4, 4] and [6, 2]
     - use this method of replacement to add ornaments? if so, how to connect with pitch of first note in next bar?
-
-- clarinet part in Bb
-
-- pick actual notes for piano right hand
-
-- last two bars should have some sort of rhythmic ending (half half whole for example)
-
-x - [forced all flats] force all sharps or all flats? (send score to Katie and Devin to critique the notation)
-x - switch clefs where appropriate in cello
