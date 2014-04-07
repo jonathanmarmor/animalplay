@@ -87,7 +87,7 @@ REGISTERS = {
 }
 
 OUT_OF_TUNE_RATE = \
-    [random.uniform(0.0, 0.6) for _ in range(8)] + \
+    [random.uniform(0.0, 0.45) for _ in range(8)] + \
     [random.uniform(0.0, 0.2) for _ in range(8)] + \
     [random.uniform(0.0, 0.1) for _ in range(8)] + \
     [random.uniform(0.0, 0.3) for _ in range(8)]
