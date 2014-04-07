@@ -130,11 +130,9 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number, volume_s
     return pitch
 
 
-
-
 ORNAMENT_RATES = defaultdict(dict)
-ORNAMENT_RATES[0]['Violin'] = 0.3
-ORNAMENT_RATES[1]['Violin'] = 0.6
+ORNAMENT_RATES[0]['Violin'] = 0.4
+ORNAMENT_RATES[1]['Violin'] = 0.7
 ORNAMENT_RATES[1]['Bb Clarinet'] = 0.9
 ORNAMENT_RATES[2]['Bb Clarinet'] = 0.9
 ORNAMENT_RATES[2]['Cello'] = 0.3
