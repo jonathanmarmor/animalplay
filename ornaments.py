@@ -233,12 +233,12 @@ REPLACE[(8, 8)]['options'] = [
     [(8, 3), 1, 1, 1, 1, 1],
     [(8, 2), 2, 2, 2],
 
-    [1, (3, 4, 4)],
-    [2, (2, 4, 4)],
-    [1, 1, (2, 4, 4)],
-    [1, 1, 1, (1, 4, 4)],
-    [1, 1, 1, 1, (4, 4)],
-    [2, 2, (4, 4)],
+    [1, (3, 4, 8)],
+    [2, (2, 4, 8)],
+    [1, 1, (2, 4, 8)],
+    [1, 1, 1, (1, 4, 8)],
+    [1, 1, 1, 1, (4, 8)],
+    [2, 2, (4, 8)],
 
 ]
 
@@ -316,7 +316,7 @@ for k in REPLACE:
             total += duration
 
         if not expected == total:
-            print k, option
+            print 'in ornaments.py these options dont have the expected total:', k, option
 
 
 """

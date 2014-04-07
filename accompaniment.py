@@ -59,11 +59,22 @@ def build_options(previous, harmony, unused_harmony, lowest, highest):
     return options
 
 
+def get_previous(previous):
+    if isinstance(previous, list):
+        high = max(previous)
+        low = min(previous)
+        previous = (high - low) / 2
+    return previous
+
+
 def next_accompaniment_notes(name_a, name_b, previous_a, previous_b, harmony, unused_harmony, movement_number):
     registers = REGISTERS[movement_number]
 
     a_register = registers[name_a]
     b_register = registers[name_b]
+
+    previous_a = get_previous(previous_a)
+    previous_b = get_previous(previous_b)
 
     if previous_a == None:
         previous_a = random.randint(a_register['lowest'], a_register['highest'])
@@ -99,7 +110,41 @@ def next_accompaniment_notes(name_a, name_b, previous_a, previous_b, harmony, un
 
             weighted_interval_options.append(((a, b), weight))
 
-    return weighted_choice(*zip(*weighted_interval_options))
+    choice_a, choice_b = weighted_choice(*zip(*weighted_interval_options))
+
+    # Add double stops
+    if name_a == 'Violin' and name_b == 'Cello':
+        new_choice_a = None
+        new_a_options = []
+        for p in a_options:
+            interval_class = get_interval_class(choice_a, p)
+            in_other = p % 12 == choice_b % 12
+            if interval_class in [3, 4, 5] or in_other and p != choice_a:
+                new_a_options.append(p)
+        a_options = new_a_options
+        if a_options:
+            violin_second_note = random.choice(a_options)
+            new_choice_a = [choice_a, violin_second_note]
+
+        new_choice_b = None
+        new_b_options = []
+        for p in b_options:
+            interval_class = get_interval_class(choice_b, p)
+            in_other = p % 12 == choice_a % 12
+            if interval_class in [3, 4, 5] or in_other and p != choice_b:
+                new_b_options.append(p)
+        b_options = new_b_options
+        if b_options:
+            cello_second_note = random.choice(b_options)
+            new_choice_b = [choice_b, cello_second_note]
+
+        if new_choice_a:
+            choice_a = new_choice_a
+
+        if new_choice_b:
+            choice_b = new_choice_b
+
+    return choice_a, choice_b
 
 
 def add_accompaniment_notes(rhythm, harmonies, unused):

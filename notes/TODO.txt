@@ -21,13 +21,12 @@ x - make soloist part for real
 x - choose density of out of tune notes by volume section (for solo part) (Make sure there are no out of tune notes written for clarinet)
 x - join some repeated notes in the solo part
 x - add phrase-length harmonic rhythm options
-
 x - solo part ornaments (via rhythm replacement, or grace notes?)
-- double stops in accompaniment parts 3rd movement
+x - double stops in accompaniment parts 3rd movement
+
 - pick actual notes for piano right hand
 - clarinet part in Bb
 - last two bars should have some sort of rhythmic ending (half half whole for example)
-- out of tune notes in accompaniment parts 3rd movement
 - occassional fifths in piano left hand
 
 
@@ -35,6 +34,7 @@ x - solo part ornaments (via rhythm replacement, or grace notes?)
 
 No
 
+- out of tune notes in accompaniment parts 3rd movement
 - solo part: make it likely to have scalar motion. try n-grams instead of just previous
 - solo part: glissandi?
 - solo part: incorporate some transcribed melodies?
