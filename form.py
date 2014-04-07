@@ -303,7 +303,7 @@ class Form(object):
             chords = []
             for h, unused_h in zip(harmonies, unused):
                 chord = next_piano_right_hand_chord(previous, h, unused_h)
-                previous = chord
+                previous = chord[:]
                 chords.append(chord)
                 # [unused_h.remove(pitch % 12) for pitch in chord]
 
