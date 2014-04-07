@@ -90,7 +90,7 @@ OUT_OF_TUNE_RATE = \
     [random.uniform(0.0, 0.6) for _ in range(8)] + \
     [random.uniform(0.0, 0.2) for _ in range(8)] + \
     [random.uniform(0.0, 0.1) for _ in range(8)] + \
-    [random.uniform(0.0, 0.2) for _ in range(8)]
+    [random.uniform(0.0, 0.3) for _ in range(8)]
 
 FIRST_NOTE = True
 
@@ -135,8 +135,8 @@ ORNAMENT_RATES[0]['Violin'] = 0.4
 ORNAMENT_RATES[1]['Violin'] = 0.7
 ORNAMENT_RATES[1]['Bb Clarinet'] = 0.9
 ORNAMENT_RATES[2]['Bb Clarinet'] = 0.9
-ORNAMENT_RATES[2]['Cello'] = 0.3
-ORNAMENT_RATES[3]['Cello'] = 0.3
+ORNAMENT_RATES[2]['Cello'] = 0.5
+ORNAMENT_RATES[3]['Cello'] = 0.5
 ORNAMENT_RATES[3]['Violin'] = 0.7
 
 
