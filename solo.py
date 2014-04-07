@@ -3,6 +3,7 @@ from itertools import groupby
 from collections import defaultdict
 
 from utils import weighted_choice, exp_weights
+from ornaments import replace_note
 
 
 def get_actions(soloists):
@@ -129,31 +130,19 @@ def next_soloist_note(soloist_name, previous, harmony, movement_number, volume_s
     return pitch
 
 
-REPLACE = defaultdict(dict)
-REPLACE[16]['options'] = [[12, 4], [(12, 2), 2], [8, 8], [8, 6, 2], [6, 2, 8], [6, 2, 6, 2], [6, 6, 4], [4, 6, 6], [6, (2, 6), 2]]
-REPLACE[16]['weights'] = range(len(REPLACE[16]['options']), 0, -1)
-
-REPLACE[(16, 8)]['options'] = [[12, (4, 8)], [(16, 4), 4], [(16, 6), 2], [4, (12, 8)], [8, (8, 4), 4], [8, (8, 6), 2], [8, (8, 2), 6], [(16, 2), 6]]
-REPLACE[(16, 8)]['weights'] = range(len(REPLACE[(16, 8)]['options']), 0, -1)
-
-REPLACE[(8, 16)]['options'] = [[(8, 12), 4], [(8, 8), 8], [(8, 8, 6), 2], [4, (4, 16)], [4, (4, 12), 4]]
-REPLACE[(8, 16)]['weights'] = range(len(REPLACE[(8, 16)]['options']), 0, -1)
-
-REPLACE[(8, 8)]['options'] = [[(8, 4), 4], [(8, 6), 2], [4, (4, 8)], [4, (4, 4), 4]]
-REPLACE[(8, 8)]['weights'] = range(len(REPLACE[(8, 8)]['options']), 0, -1)
-
-REPLACE[8]['options'] = [[4, 4], [6, 2], [2, 6], [2, (2, 2), 2]]
-REPLACE[8]['weights'] = exp_weights(len(REPLACE[8]['options']), exponent=1.8)
 
 
-def replace_note(duration):
-    if duration in REPLACE:
-        return weighted_choice(REPLACE[duration]['options'], REPLACE[duration]['weights'] )
-    else:
-        return [duration]
+ORNAMENT_RATES = defaultdict(dict)
+ORNAMENT_RATES[0]['Violin'] = 0.3
+ORNAMENT_RATES[1]['Violin'] = 0.6
+ORNAMENT_RATES[1]['Bb Clarinet'] = 0.9
+ORNAMENT_RATES[2]['Bb Clarinet'] = 0.9
+ORNAMENT_RATES[2]['Cello'] = 0.3
+ORNAMENT_RATES[3]['Cello'] = 0.3
+ORNAMENT_RATES[3]['Violin'] = 0.7
 
 
-def add_notes(rhythm, harmonies, unused):
+def add_notes(rhythm, harmonies, unused, soloist_name, movement_number):
     """Take a raw harmonic rhythm and add more notes by getting rid of ties and potentially subdividing exisisting notes."""
     new_rhythm = []
     new_harmonies = []
@@ -173,7 +162,7 @@ def add_notes(rhythm, harmonies, unused):
     newer_harmonies = []
     newer_unused = []
     for duration, harmony, unused_harmony in zip(new_rhythm, new_harmonies, new_unused):
-        if random.random() > 0.85:
+        if random.random() < ORNAMENT_RATES[movement_number][soloist_name]:
             durations = replace_note(duration)
             for duration in durations:
                 newer_rhythm.append(duration)
