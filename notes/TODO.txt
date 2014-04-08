@@ -24,7 +24,7 @@ x - add phrase-length harmonic rhythm options
 x - solo part ornaments (via rhythm replacement, or grace notes?)
 x - double stops in accompaniment parts 3rd movement
 
-- pick actual notes for piano right hand
+x [needs work] - pick actual notes for piano right hand
 - clarinet part in Bb
 - last two bars should have some sort of rhythmic ending (half half whole for example)
 - occassional fifths in piano left hand

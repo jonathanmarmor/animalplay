@@ -5,8 +5,8 @@ from harmony import score_chord, pitches_to_intervals
 from utils import weighted_choice, exp_weights
 
 
-LOWEST = 0
-HIGHEST = 24
+LOWEST = -2
+HIGHEST = 30
 
 
 def rank_by_distance(previous_center, options):
@@ -71,8 +71,6 @@ def get_center(chord):
 
 def next_piano_right_hand_chord(previous, harmony, unused_harmony):
     chord = []
-    previous = [p for p in previous if p != None]
-
     previous_center = get_center(previous)
 
     for pc in unused_harmony:
@@ -80,37 +78,61 @@ def next_piano_right_hand_chord(previous, harmony, unused_harmony):
         ranked = rank_by_distance(previous_center, unused_options)
         chord.append(ranked[0])
 
-    len_chord = len(chord)
-    if len_chord < 5:
-        n_notes = random.randint(len_chord, 5)
+    n_notes = random.choice([2, 3])
+    while len(chord) < n_notes:
+        if len(chord) == 1:
+            lowest = chord[0] - 6
+            highest = chord[0] + 7
+        else:
+            lowest = previous_center - 8
+            highest = previous_center + 9
+        options = [p for p in range(lowest, highest) if p % 12 in harmony and p >= LOWEST and p <= HIGHEST and p not in chord]
+        if not options and len(chord) > 0:
+            print 'breaking'
+            break
+        # print 'range', range(lowest, highest)
+        # print 'harmony', harmony
+        # print 'lowest', LOWEST, 'highest', HIGHEST
+        # print 'chord', chord
+        # print 'options', options
+        # print
 
-        if len_chord < n_notes:
-            for _ in range(n_notes - len_chord):
-                if chord:
-                    lowest = max(chord) - 13
-                    highest = min(chord) + 14
-                else:
-                    lowest = previous_center - 10
-                    highest = previous_center + 11
 
-                options = [p for p in range(lowest, highest) if p % 12 in harmony and p >= LOWEST and p <= HIGHEST and p not in chord]
-                if chord:
-                    print 'harm'
-                    ranked = rank_by_harmony_score(chord, options)
-                    if not ranked:
-                        print 'distance 1'
-                        ranked = rank_by_distance(previous_center, options)
-                else:
-                    print 'distance 2'
-                    ranked = rank_by_distance(previous_center, options)
-                if not ranked:
-                    Exception('couldnt get any ranked notes. Figure out why.')
+        choice = random.choice(options)
+        chord.append(choice)
 
-                choice = weighted_choice(ranked, exp_weights(len(ranked), exponent=4))
 
-                # if choice == None:
-                #     return next_piano_right_hand_chord(previous, harmony, unused_harmony)
+    # len_chord = len(chord)
+    # if len_chord < 5:
+    #     n_notes = random.randint(len_chord, 5)
 
-                chord.append(choice)
+    #     remaining_notes = n_notes - len_chord
+    #     if remaining_notes:
+    #         for _ in range(remaining_notes):
+    #             if chord:
+    #                 lowest = max(chord) - 13
+    #                 highest = min(chord) + 14
+    #             else:
+    #                 lowest = previous_center - 10
+    #                 highest = previous_center + 11
+
+    #             options = [p for p in range(lowest, highest) if p % 12 in harmony and p >= LOWEST and p <= HIGHEST and p not in chord]
+    #             if not options:
+    #                 options = [p for p in range(lowest - 12, highest + 12) if p % 12 in harmony and p >= LOWEST and p <= HIGHEST and p not in chord]
+    #                 print 'wider options:', options
+
+    #             if chord:
+    #                 ranked = rank_by_harmony_score(chord, options)
+    #                 if not ranked:
+    #                     ranked = rank_by_distance(previous_center, options)
+    #             else:
+    #                 ranked = rank_by_distance(previous_center, options)
+    #             if not ranked:
+    #                 Exception('couldnt get any ranked notes. Figure out why.')
+
+    #             choice = weighted_choice(ranked, exp_weights(len(ranked), exponent=4))
+
+
+    #             chord.append(choice)
     chord.sort()
     return chord
