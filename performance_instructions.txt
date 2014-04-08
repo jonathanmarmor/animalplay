@@ -1,19 +1,59 @@
+Animal Play
+2014-04-07
+
 Performance Instructions:
 
 Everyone
 - Accidentals are remembered to the end of the measure in which they occur and only in their own octave.
 - Assume everything is slurred and tenuto whenever possible.
-
-Violin and Cello
-- Notated dyads of a minor second or major second should be played as a single note. Pick any pitch between the two notated pitches.
-
-Clarinet
-- Your part is in Bb (**TODO make this true), the clarinet part in the score is in concert pitch.
+- Everything is tutti, when that makes sense.
+- Slight rubato, but together, is great.
+- No vibrato.
+- The double bars indicate changes in overall ensemble volume, alternating quiet, loud, quiet, loud... for the whole piece.
+- Tune to the synthesizer tones used in the piece.
 
 Soloists
 - Soloists should be louder than everyone else.
 - The soloist part should, as much as possible, continuously sound.
-- The Violin is the soloist for about the first half of the piece
-- Just before rehearsal mark D the Clarinet becomes the soloist
-- Just before rehearsal mark F the Cello becomes the soloist
-- Just before the end of the piece the Violin becomes the soloist again
+- The Violin is the soloist for about the first half of the piece.
+- Just after rehearsal mark D the Clarinet becomes the soloist.
+- A few bars before rehearsal mark F the Cello becomes the soloist.
+- In the last bar the Violin becomes the soloist again for a second.
+
+Violin and Cello
+- Notated dyads of a minor second or major second (or diminished third in some cases) should be played as a single pitch anywhere between the two notated pitches. It should sound out-of-tune against the rest of the ensemble. These pitches must be played very steadily, without glissing or adjusting the pitch once you've started playing it.
+- Starting in bar 101, there is a long stretch where the violin and cello play double stops together. If there are double stops that are impossible to play, just leave one note out, but only do this is absolutely necessary.
+
+Clarinet
+- Your part is in Bb, the clarinet part in the score is in concert pitch. (There is also a part for you in concert, in case that helps.)
+- Breathing: it's up to you when to take breaths. Try to keep your parts as legato and sustaining as possible, but of course don't let yourself die of oxygen deprivation!
+
+Piano
+- Play as connected and legato as possible.
+- There might be an occassional chord where you can't reach all the notes. In these cases, just leave out a note or notes or your choice. Only leave notes out when absolutely necessary.
+
+Synthesizer
+- Can be played on a synthesizer, organ, or prerecorded sounds.
+- Feel free to use weights on the keys, as long as you hit your entrances and exits.
+- It's up to you to choose the sound, but here are some rules/guidelines:
+    - It must sustain continuously without changing volume, pitch, or timbre.
+    - No vibrato.
+    - The attack and release should be like turning on and off a light -- there should be no envelope at all and no reverb or decay.
+    - Something like a triangle wave is probably about the right timbre.
+    - The built-in very cheesy MIDI recorder sound that comes with Windows XP or cheap Casio keyboards would be perfect.
+    - It should be quiet enough that you could turn it on while music is playing without really noticing, and the effect of turning it off should be like a refrigerator cycling off in the other room -- you didn't notice it was on but now that it is off you can hear all other sounds more clearly.
+    - It should be loud enough that notes played by the other instruments clearly harmonize, and "buzz" on fifths and major tenths and such.
+    - It must be absolutely in tune with the other instruments
+
+
+Note:
+Please ignore some of the weird rhythmic notation (tied notes where it should just be a whole note, consecutive small rests where it should just be a whole note rest, some weird spellings in the Bb clarinet part, dynamics under rests, etc). These are artifacts of my composition process that I didn't get a chance to clean up. Sorry!
+
+
+*** New and unique versions of this piece can be automatically generated. Please let me know if you'd like more versions! ***
+
+Please get in touch if you have questions.
+Jonathan Marmor
++1 347 647 9443
+jmarmor@gmail.com
+

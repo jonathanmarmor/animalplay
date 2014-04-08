@@ -4,7 +4,7 @@
 import datetime
 
 from database import Database
-from notate import notate_score, notate_parts
+from notate import notate_score, notate_parts, notate_Bb_clarinet_part
 from score import make_score
 from form import Form
 
@@ -50,6 +50,7 @@ class AnimalPlay(object):
         notate_score(self.score, self.now, midi=midi)
         if parts:
             notate_parts(self.score, self.now, midi=midi)
+            notate_Bb_clarinet_part(self.score, self.now)
 
     def serialize(self):
         # TODO figure out other ways to serialize so I can reconstitute as a python object I can manipulate

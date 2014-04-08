@@ -107,7 +107,8 @@ def make_midi(lilypond_file, output_filepath):
 def get_parts_filepath(now):
     folder = get_output_folder(now)
     parts_folder = os.path.join(folder, 'parts')
-    os.mkdir(parts_folder)
+    if not os.path.exists(parts_folder):
+        os.mkdir(parts_folder)
     filepath = os.path.join(parts_folder, 'animalplay')
     return filepath
 
@@ -132,19 +133,53 @@ def notate_score(score, now, midi=True):
 def notate_parts(score, now, midi=True):
     base_filepath = get_parts_filepath(now)
     for staff in score:
-        lilypond_file = make_lilypond_file(staff, now, subtitle=staff.name)
+        name = staff.name
+        if name == 'Bb Clarinet':
+            name = 'Clarinet in concert pitch'
+        lilypond_file = make_lilypond_file(staff, now, subtitle=name)
 
-        filepath = '{}-{}'.format(base_filepath, staff.name)
+        filepath = '{}-{}'.format(base_filepath, name)
         ly_file_path = '{}.{}'.format(filepath, 'ly')
 
         # Write Lilypond file
         with open(ly_file_path, 'w') as file_handle:
             file_handle.write(format(lilypond_file))
 
-        if staff.name == 'Piano':
+        if name == 'Piano':
             fix_piano_label(ly_file_path)
 
         make_pdf(ly_file_path, filepath)
 
         if midi:
             make_midi(lilypond_file, filepath)
+
+
+def transpose_to_Bb(ly_file_path):
+    with open(ly_file_path, 'r') as f:
+        text = f.read()
+    os.remove(ly_file_path)
+
+    a = '''\score {\n\t\context Staff = '''
+    b = '''\score {\n\t\\transpose bf, c\n\t\context Staff = '''
+    text = text.replace(a, b)
+
+    with open(ly_file_path, 'w') as f:
+        text = f.write(text)
+
+
+def notate_Bb_clarinet_part(score, now):
+    staff = score['Bb Clarinet']
+    name = 'Clarinet in Bb'
+    lilypond_file = make_lilypond_file(staff, now, subtitle=name)
+
+    base_filepath = get_parts_filepath(now)
+    filepath = '{}-{}'.format(base_filepath, name)
+    ly_file_path = '{}.{}'.format(filepath, 'ly')
+
+    # Write Lilypond file
+    with open(ly_file_path, 'w') as file_handle:
+        file_handle.write(format(lilypond_file))
+
+    transpose_to_Bb(ly_file_path)
+
+    make_pdf(ly_file_path, filepath)
