@@ -221,6 +221,27 @@ def break_down(n):
     return rv
 
 
+def break_down_more(n):
+    """Get all the ways an integer can be broken into smaller integers. I'm sure there's a more elegant way to do this.
+    >>> break_down(5)
+    [[5], [1, 4], [1, 1, 3], [1, 1, 1, 2], [1, 2, 2], [1, 1, 1, 1, 1]]
+
+    NOTE: it doesn't do divisions of more than one type of non-1 or non-2, like [2, 3]
+    [[5], [1, 4], [1, 1, 3], [2, 3], [1, 1, 1, 2], [1, 2, 2], [1, 1, 1, 1, 1]]
+
+    """
+    rv = []
+    for top in range(n, 1, -1):
+        temp = [1] * n
+        while temp.count(1) >= top:
+            for _ in range(top):
+                temp.remove(1)
+            temp.append(top)
+            rv.append(temp[:])
+    rv.append([1] * n)
+    return rv
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
