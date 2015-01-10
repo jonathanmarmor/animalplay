@@ -5,7 +5,7 @@ Music for clarinet, violin, cello, piano, and synthesizer for SPOR Festival 2014
 
 ## Setup
 
-    brew install freetype gfortran redis mongodb
+    brew install Caskroom/cask/xquartz Caskroom/cask/mactex gcc freetype gfortran redis mongodb lilypond
     git clone https://github.com/jonathanmarmor/animalplay.git
     pip install -r requirements.txt
 
