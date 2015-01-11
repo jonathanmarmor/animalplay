@@ -4,3 +4,4 @@ librosa
 pyzmq
 pymongo
 redis
+matplotlib

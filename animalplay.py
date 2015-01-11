@@ -3,10 +3,33 @@
 
 import datetime
 
+import redis
+
 from database import Database
 from notate import notate_score, notate_parts, notate_Bb_clarinet_part
 from score import make_score
 from form import Form
+
+
+redis = redis.Redis()
+
+
+def get_animal():
+    animal = redis.spop('animals')
+    if not animal:
+        redis.sadd('animals',
+            'human',
+            'bird',
+            'dog',
+            'deer',
+            'mouse',
+            'fish',
+            'snake',
+            'bear',
+            'cat',
+            'duck')
+        animal = redis.spop('animals')
+    return animal
 
 
 class AnimalPlay(object):
@@ -16,6 +39,9 @@ class AnimalPlay(object):
 
         self.score = make_score()
         self.form = Form(self.score)
+
+        self.animal = get_animal()
+        self.title = 'Animal Play - {}'.format(self.animal)
 
     # def test(self):
     #     self.score = make_score()
@@ -47,10 +73,10 @@ class AnimalPlay(object):
     #     self.notate(parts=False, midi=True)
 
     def notate(self, parts=True, midi=True):
-        notate_score(self.score, self.now, midi=midi)
+        notate_score(self.score, self.now, self.title, midi=midi)
         if parts:
-            notate_parts(self.score, self.now, midi=midi)
-            notate_Bb_clarinet_part(self.score, self.now)
+            notate_parts(self.score, self.now, self.title, midi=midi)
+            notate_Bb_clarinet_part(self.score, self.now, self.title)
 
     def serialize(self):
         # TODO figure out other ways to serialize so I can reconstitute as a python object I can manipulate

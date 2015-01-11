@@ -7,15 +7,15 @@ from abjad import lilypondfiletools
 from abjad.tools.markuptools import Markup
 
 
-def make_lilypond_file(score, now, subtitle=None):
-    title = 'Animal Play'
-    composer = 'Jonathan Marmor'
+def make_lilypond_file(score, now, title, subtitle=None):
+    # composer = 'Jonathan Marmor'
+    # composer = ''  # For anonymized, 10-pack version
 
     lilypond_file = lilypondfiletools.make_basic_lilypond_file(score)
     lilypond_file.header_block.title = Markup(title)
     if subtitle:
         lilypond_file.header_block.subtitle = Markup(subtitle)
-    lilypond_file.header_block.composer = Markup(composer)
+    # lilypond_file.header_block.composer = Markup(composer)
 
     footer_title = title
     if subtitle:
@@ -113,8 +113,8 @@ def get_parts_filepath(now):
     return filepath
 
 
-def notate_score(score, now, midi=True):
-    lilypond_file = make_lilypond_file(score, now)
+def notate_score(score, now, title, midi=True):
+    lilypond_file = make_lilypond_file(score, now, title)
     filepath = get_filepath(now)
     ly_file_path = '{}.{}'.format(filepath, 'ly')
 
@@ -130,13 +130,13 @@ def notate_score(score, now, midi=True):
         make_midi(lilypond_file, filepath)
 
 
-def notate_parts(score, now, midi=True):
+def notate_parts(score, now, title, midi=True):
     base_filepath = get_parts_filepath(now)
     for staff in score:
         name = staff.name
         if name == 'Bb Clarinet':
             name = 'Clarinet in concert pitch'
-        lilypond_file = make_lilypond_file(staff, now, subtitle=name)
+        lilypond_file = make_lilypond_file(staff, now, title, subtitle=name)
 
         filepath = '{}-{}'.format(base_filepath, name)
         ly_file_path = '{}.{}'.format(filepath, 'ly')
@@ -167,10 +167,10 @@ def transpose_to_Bb(ly_file_path):
         text = f.write(text)
 
 
-def notate_Bb_clarinet_part(score, now):
+def notate_Bb_clarinet_part(score, now, title):
     staff = score['Bb Clarinet']
     name = 'Clarinet in Bb'
-    lilypond_file = make_lilypond_file(staff, now, subtitle=name)
+    lilypond_file = make_lilypond_file(staff, now, title, subtitle=name)
 
     base_filepath = get_parts_filepath(now)
     filepath = '{}-{}'.format(base_filepath, name)

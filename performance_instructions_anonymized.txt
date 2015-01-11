@@ -1,5 +1,5 @@
 Animal Play
-2014-04-07
+
 
 Performance Instructions:
 
@@ -49,13 +49,4 @@ Synthesizer
 
 
 Note:
-Please ignore some of the weird rhythmic notation (tied notes where it should just be a whole note, consecutive small rests where it should just be a whole note rest, some weird spellings in the clarinet part, dynamics under rests, etc). These are artifacts of my composition process that I didn't get a chance to clean up.
-
-
-*** New and unique versions of this piece can be automatically generated. Please let me know if you'd like more versions! ***
-
-Please get in touch if you have questions.
-Jonathan Marmor
-+1 347 647 9443
-jmarmor@gmail.com
-
+Please ignore some of the weird rhythmic notation (tied notes where it should just be a whole note, consecutive small rests where it should just be a whole note rest, some weird spellings in the clarinet part, dynamics under rests, etc). These are artifacts of my composition process that I didn't have the will power to clean up.
